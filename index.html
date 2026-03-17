@@ -2,131 +2,250 @@
 <html lang="hu">
 <head>
 <meta charset="UTF-8">
-<title>Végtelen Jegyzet PRO - Full Font Edition</title>
+<title>Végtelen Jegyzet PRO - Fordítóval</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Pinyon+Script&family=Nabla&family=Bungee+Shade&family=Ewert&family=Vast+Shadow&family=Creepster&family=Lobster&family=Righteous&family=Faster+One&family=Special+Elite&family=Orbitron&family=Pacifico&family=Press+Start+2P&family=Permanent+Marker&family=Sacramento&family=Silkscreen&family=Codystar&family=Megrim&family=Fredericka+the+Great&family=UnifrakturMaguntia&family=Wallpoet&family=Syncopate&family=Fascinate+Inline&family=Nosifer&family=Rubik+Glitch&family=Bangers&family=Alumni+Sans+Inline+One&family=Iceberg&family=Glass+Antiqua&family=Kranky&family=Great+Vibes&family=Bruno+Ace+SC&family=VT323&family=Montserrat&family=Nunito&family=Oswald&family=Playfair+Display&family=Spectral&family=Ultra&family=Varela+Round&family=Alegreya&family=Roboto+Serif&family=Roboto+Mono&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0e0e0e;--panel:#1a1a1a;--text:#eee;--border:#444;}
-.light{--bg:#f5f5f5;--panel:#e0e0e0;--text:#222;--border:#bbb;}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Consolas,monospace;}
-#topbar{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:var(--panel);border-bottom:1px solid var(--border);}
-button,select,input{background:var(--bg);color:var(--text);border:1px solid var(--border);padding:6px 10px;border-radius:4px;}
-textarea{width:100vw;height:calc(100vh - 140px);background:var(--bg);color:var(--text);border:none;padding:20px;box-sizing:border-box;resize:none;line-height:1.6;}
+:root{--bg:#0e0e0e;--panel:#1a1a1a;--text:#eee;--border:#444;--accent:#00ff00;}
+.light{--bg:#f5f5f5;--panel:#e0e0e0;--text:#222;--border:#bbb;--accent:#008800;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial, sans-serif;overflow:hidden;}
+#topbar{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:var(--panel);border-bottom:2px solid var(--border);align-items:center;}
+button,select,input{background:#000;color:var(--text);border:1px solid var(--border);padding:6px 10px;border-radius:4px;cursor:pointer;font-family:inherit;}
+button:hover{background:#333;}
+textarea{width:100vw;height:calc(100vh - 140px);background:rgba(0,0,0,0.7);color:inherit;border:none;padding:20px;box-sizing:border-box;resize:none;line-height:1.6;font-size:25px;outline:none;}
+#stats{position:fixed;bottom:10px;right:20px;font-family:'VT323';font-size:20px;color:var(--accent);pointer-events:none;z-index:10;}
 #pdf-helper{position:absolute;left:-9999px;width:800px;padding:40px;white-space:pre-wrap;}
-#search{width:130px;}
+.group{display:flex;align-items:center;gap:4px;border-right:1px solid var(--border);padding-right:8px;margin-right:4px;}
 </style>
 </head>
 <body>
 
 <div id="topbar">
-<select id="notes"></select>
-<button onclick="newNote()">+ Új</button>
-<select id="fontFamily" onchange="changeFont()">
-<option value="Consolas" style="color:#ffffff;">Consolas (Alap)</option>
-<option value="Montserrat" style="color:#00ffcc;font-family:'Montserrat';">Montserrat</option>
-<option value="Nunito" style="color:#ffccff;font-family:'Nunito';">Nunito</option>
-<option value="Oswald" style="color:#ff6600;font-family:'Oswald';">Oswald</option>
-<option value="Playfair Display" style="color:#ffff99;font-family:'Playfair Display';">Playfair Display</option>
-<option value="Spectral" style="color:#99ff99;font-family:'Spectral';">Spectral</option>
-<option value="Ultra" style="color:#ff3333;font-family:'Ultra';">Ultra (Vastag)</option>
-<option value="Varela Round" style="color:#66ccff;font-family:'Varela Round';">Varela Round</option>
-<option value="Alegreya" style="color:#ff9900;font-family:'Alegreya';">Alegreya</option>
-<option value="Roboto Serif" style="color:#cccccc;font-family:'Roboto Serif';">Roboto Serif</option>
-<option value="Roboto Mono" style="color:#00ff00;font-family:'Roboto Mono';">Roboto Mono</option>
-<option value="Orbitron" style="color:#00f6ff;font-family:'Orbitron';">Orbitron (Sci-fi)</option>
-<option value="Special Elite" style="color:#ffd700;font-family:'Special Elite';">Typewriter (Gépelés)</option>
-<option value="VT323" style="color:#00ff00;font-family:'VT323';">Terminal (PC)</option>
-<option value="Press Start 2P" style="color:#ffff00;font-family:'Press Start 2P';">8-Bit Retro</option>
-<option value="Monoton" style="color:#ff00ff;font-family:'Monoton';">MONOTON (Neon)</option>
-<option value="Pinyon Script" style="color:#00ff99;font-family:'Pinyon Script';">Pinyon (Kézírás)</option>
-<option value="Creepster" style="color:#ff0000;font-family:'Creepster';">Creepster (Horror)</option>
-<option value="Nabla" style="color:#ff6600;font-family:'Nabla';">Nabla (3D)</option>
-<option value="Lobster" style="color:#00f6ff;font-family:'Lobster';">Lobster</option>
-<option value="Righteous" style="color:#ffff00;font-family:'Righteous';">Righteous</option>
-<option value="Bungee Shade" style="color:#ff33ff;font-family:'Bungee Shade';">Bungee</option>
-<option value="Permanent Marker" style="color:#ff6600;font-family:'Permanent Marker';">Filctoll</option>
-<option value="Sacramento" style="color:#ff99cc;font-family:'Sacramento';">Sacramento</option>
-<option value="Silkscreen" style="color:#33ff33;font-family:'Silkscreen';">Pixel</option>
-<option value="Codystar" style="color:#00ffff;font-family:'Codystar';">Codystar</option>
-<option value="Megrim" style="color:#ffcc00;font-family:'Megrim';">Megrim</option>
-<option value="Fredericka the Great" style="color:#cc33ff;font-family:'Fredericka the Great';">Fredericka</option>
-<option value="UnifrakturMaguntia" style="color:#7a001f;font-family:'UnifrakturMaguntia';">Gótikus</option>
-<option value="Wallpoet" style="color:#0080ff;font-family:'Wallpoet';">Graffiti</option>
-<option value="Syncopate" style="color:#00ff99;font-family:'Syncopate';">Techno</option>
-<option value="Fascinate Inline" style="color:#ffcc00;font-family:'Fascinate Inline';">Fascinate Inline</option>
-<option value="Nosifer" style="color:#ff0000;font-family:'Nosifer';">Vérző</option>
-<option value="Rubik Glitch" style="color:#ffff00;font-family:'Rubik Glitch';">Glitch</option>
-<option value="Bangers" style="color:#ff00ff;font-family:'Bangers';">Bangers</option>
-<option value="Alumni Sans Inline One" style="color:#00ffff;font-family:'Alumni Sans Inline One';">Alumni Inline</option>
-<option value="Iceberg" style="color:#ff6600;font-family:'Iceberg';">Iceberg</option>
-<option value="Glass Antiqua" style="color:#ff99cc;font-family:'Glass Antiqua';">Glass Antiqua</option>
-<option value="Kranky" style="color:#66ffcc;font-family:'Kranky';">Kranky</option>
-<option value="Great Vibes" style="color:#ff99cc;font-family:'Great Vibes';">Great Vibes</option>
-<option value="Bruno Ace SC" style="color:#00f6ff;font-family:'Bruno Ace SC';">Bruno Ace</option>
-<option value="Arial" style="color:#ffffff;">Arial</option>
-<option value="Times New Roman" style="color:#ffffff;">Times New Roman</option>
-<option value="Verdana" style="color:#ffffff;">Verdana</option>
-</select>
-
-<input type="number" id="fontSize" value="14" min="8" max="100" oninput="changeSize()">
-<button onclick="insertDate()">🕒 Dátum</button>
-<button onclick="toggleDark()">🌓 Sötét</button>
-<button onclick="downloadTxt()">⬇ TXT</button>
-<button onclick="importTxt()">📂 Import</button>
-<input type="file" id="fileInput" accept=".txt" style="display:none">
-<button onclick="downloadPDF()">📄 PDF</button>
-<button onclick="downloadAllZip()">📦 Minden ZIP</button>
-<button onclick="undo()">⬅️ Vissza</button>
-<button onclick="redo()">➡️ Előre</button>
-<button onclick="deleteCurrent()">🗑 Törlés</button>
-<button onclick="deleteAll()">⚠️ Reset</button>
-<input id="search" placeholder="Keresés..." oninput="searchText()">
+<div class="group">
+    <select id="notes" onchange="switchNote()"></select>
+    <button onclick="newNote()">+ Új</button>
 </div>
 
-<textarea id="editor"></textarea>
+<div class="group">
+<select id="fontFamily" onchange="changeFont()">
+    <option value="Arial" style="color:#ffffff;">1. Arial (Alap)</option>
+    <option value="Montserrat" style="color:#00ffcc;font-family:'Montserrat';">2. Montserrat</option>
+    <option value="Nunito" style="color:#ffccff;font-family:'Nunito';">3. Nunito</option>
+    <option value="Oswald" style="color:#ff6600;font-family:'Oswald';">4. Oswald</option>
+    <option value="Playfair Display" style="color:#ffff99;font-family:'Playfair Display';">5. Playfair</option>
+    <option value="Spectral" style="color:#99ff99;font-family:'Spectral';">6. Spectral</option>
+    <option value="Ultra" style="color:#ff3333;font-family:'Ultra';">7. Ultra</option>
+    <option value="Varela Round" style="color:#66ccff;font-family:'Varela Round';">8. Varela</option>
+    <option value="Roboto Mono" style="color:#00ff00;font-family:'Roboto Mono';">9. Mono</option>
+    <option value="Orbitron" style="color:#00f6ff;font-family:'Orbitron';">10. Sci-Fi</option>
+    <option value="Special Elite" style="color:#ffd700;font-family:'Special Elite';">11. Gépelt</option>
+    <option value="VT323" style="color:#00ff00;font-family:'VT323';">12. Terminál</option>
+    <option value="Press Start 2P" style="color:#ffff00;font-family:'Press Start 2P';">13. 8-Bit</option>
+    <option value="Monoton" style="color:#ff00ff;font-family:'Monoton';">14. Neon</option>
+    <option value="Pinyon Script" style="color:#00ff99;font-family:'Pinyon Script';">15. Kézírás</option>
+    <option value="Creepster" style="color:#ff0000;font-family:'Creepster';">16. Horror</option>
+    <option value="Nabla" style="color:#ff6600;font-family:'Nabla';">17. 3D Nabla</option>
+    <option value="Lobster" style="color:#00f6ff;font-family:'Lobster';">18. Lobster</option>
+    <option value="Bungee Shade" style="color:#ff33ff;font-family:'Bungee Shade';">19. Bungee</option>
+    <option value="Permanent Marker" style="color:#ff6600;font-family:'Permanent Marker';">20. Filctoll</option>
+    <option value="Silkscreen" style="color:#33ff33;font-family:'Silkscreen';">21. Pixel</option>
+    <option value="UnifrakturMaguntia" style="color:#7a001f;font-family:'UnifrakturMaguntia';">22. Gótikus</option>
+    <option value="Wallpoet" style="color:#0080ff;font-family:'Wallpoet';">23. Graffiti</option>
+    <option value="Nosifer" style="color:#ff0000;font-family:'Nosifer';">24. Vérző</option>
+    <option value="Rubik Glitch" style="color:#ffff00;font-family:'Rubik Glitch';">25. Glitch</option>
+    <option value="Bangers" style="color:#ff00ff;font-family:'Bangers';">26. Képregény</option>
+    <option value="Iceberg" style="color:#aaddff;font-family:'Iceberg';">27. Jéghegy</option>
+    <option value="Great Vibes" style="color:#ff99cc;font-family:'Great Vibes';">28. Elegáns</option>
+    <option value="Pacifico" style="color:#4db8ff;font-family:'Pacifico';">29. Pacifico</option>
+    <option value="Sacramento" style="color:#ff80bf;font-family:'Sacramento';">30. Sacramento</option>
+    <option value="Codystar" style="color:#ffffff;font-family:'Codystar';">31. Csillogó</option>
+    <option value="Megrim" style="color:#00ff99;font-family:'Megrim';">32. Megrim</option>
+    <option value="Syncopate" style="color:#ccccff;font-family:'Syncopate';">33. Syncopate</option>
+    <option value="Kranky" style="color:#ffcc66;font-family:'Kranky';">34. Kranky</option>
+    <option value="Ewert" style="color:#ff5050;font-family:'Ewert';">35. Ewert</option>
+</select>
+<input type="number" id="fontSize" value="25" min="8" max="100" style="width:50px" oninput="changeSize()">
+<button id="btnBold" onclick="toggleBold()"><b>B</b></button>
+<button id="btnItalic" onclick="toggleItalic()"><i>I</i></button>
+</div>
+
+<div class="group">
+    <input type="color" id="textColor" value="#eeeeee" oninput="updateStyles()">
+    <input type="color" id="bgColor" value="#000000" oninput="updateStyles()">
+    <input type="range" id="opacity" min="0" max="1" step="0.1" value="0.7" style="width:50px" oninput="updateStyles()">
+</div>
+
+<div class="group">
+    <select id="transDir">
+        <option value="hu|en">Magyar ➡ Angol</option>
+        <option value="en|hu">Angol ➡ Magyar</option>
+    </select>
+    <button onclick="translateText()">🌐 Fordítás</button>
+</div>
+
+<div class="group">
+    <button onclick="speakText()">🔊 Hallgat</button>
+    <button onclick="stopSpeak()" style="color:#ff4444;">⏹ Stop</button>
+    <button onclick="emailNote()">📧 Küldés</button>
+    <button onclick="toggleDark()">🌓 Mód</button>
+</div>
+
+<div class="group">
+    <button onclick="undo()">⬅ Vissza</button>
+    <button onclick="redo()">➡️ Előre</button>
+</div>
+
+<button onclick="downloadPDF()">📄 PDF</button>
+<button onclick="downloadTxt()">⬇ TXT</button>
+<button onclick="importTxt()">📂 Import</button>
+<input type="file" id="fileInput" accept=".txt,.zip" style="display:none">
+<button onclick="deleteCurrent()">🗑 Töröl</button>
+<button onclick="deleteAll()">⚠️ Reset</button>
+<button onclick="downloadAllZip()">📦 ZIP</button>
+<input id="search" placeholder="Keresés..." style="width:100px" oninput="searchText()">
+</div>
+
+<textarea id="editor" placeholder="Írj ide..."></textarea>
+<div id="stats">Szavak: 0 | Karakterek: 0</div>
 <div id="pdf-helper"></div>
 
 <script>
-let notes=JSON.parse(localStorage.getItem("MY_NOTES"))||{"Üdvözlő":"Minden betűtípus visszakerült a listába!"};
+let notes=JSON.parse(localStorage.getItem("MY_NOTES"))||{"Üdvözlő":"Most már tudsz fordítani is a magyar és angol nyelv között!"};
 let current=Object.keys(notes)[0];
 const editor=document.getElementById("editor");
 const select=document.getElementById("notes");
+const stats=document.getElementById("stats");
 const fileInput=document.getElementById("fileInput");
-const pdfHelper=document.getElementById("pdf-helper");
-let dark=true;
 
-// Undo / Redo
-const history={};
-const maxHistory=50;
+function updateStats(){
+    const text = editor.value.trim();
+    const words = text ? text.split(/\s+/).length : 0;
+    stats.innerText = `Szavak: ${words} | Karakterek: ${editor.value.length}`;
+}
 
-function pushHistory(note){if(!history[note]) history[note]={undo:[],redo:[]}; history[note].undo.push(notes[note]); if(history[note].undo.length>maxHistory) history[note].undo.shift(); history[note].redo=[];}
+function updateStyles(){
+    editor.style.color = document.getElementById("textColor").value;
+    const hex = document.getElementById("bgColor").value;
+    const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    editor.style.backgroundColor = `rgba(${r},${g},${b}, ${document.getElementById("opacity").value})`;
+}
 
-function undo(){if(history[current] && history[current].undo.length>1){history[current].redo.push(history[current].undo.pop()); notes[current]=history[current].undo[history[current].undo.length-1]; editor.value=notes[current]; save();}}
+function refresh(){
+    select.innerHTML="";
+    for(let n in notes){
+        let o=document.createElement("option"); o.value=n; o.textContent=n; select.appendChild(o);
+    }
+    select.value=current; editor.value=notes[current]; updateStats();
+}
 
-function redo(){if(history[current] && history[current].redo.length>0){let val=history[current].redo.pop(); history[current].undo.push(val); notes[current]=val; editor.value=notes[current]; save();}}
+function switchNote(){ current=select.value; editor.value=notes[current]; updateStats(); }
 
-function refresh(){select.innerHTML="";for(let n in notes){let o=document.createElement("option");o.value=n;o.textContent=n;select.appendChild(o);}select.value=current; editor.value=notes[current]; pushHistory(current);}
-refresh();
+editor.addEventListener("input",()=>{ 
+    notes[current]=editor.value; 
+    updateStats(); 
+    localStorage.setItem("MY_NOTES",JSON.stringify(notes)); 
+});
 
-editor.addEventListener("input",()=>{notes[current]=editor.value; pushHistory(current); save();});
-select.addEventListener("change",()=>{current=select.value; editor.value=notes[current]; pushHistory(current); save();});
+function newNote(){let n=prompt("Jegyzet neve:"); if(!n)return; notes[n]=""; current=n; refresh();}
+function deleteCurrent(){if(confirm("Törlöd ezt a jegyzetet?")){delete notes[current]; current=Object.keys(notes)[0]||"Jegyzet_1"; if(!notes[current]) notes[current]=""; refresh(); localStorage.setItem("MY_NOTES",JSON.stringify(notes));}}
+function deleteAll(){if(confirm("FIGYELEM: Minden jegyzet törlődik! Biztosan akarod?")){localStorage.clear(); location.reload();}}
 
-function save(){localStorage.setItem("MY_NOTES",JSON.stringify(notes));}
-function newNote(){let n=prompt("Jegyzet neve:"); if(!n||notes[n])return; notes[n]=""; current=n; refresh(); save();}
-function deleteCurrent(){if(confirm("Biztosan törlöd ezt a jegyzetet?")){delete notes[current]; current=Object.keys(notes)[0]||"Alap"; refresh(); save();}}
-function deleteAll(){if(confirm("MINDEN jegyzet törlődik a memóriából!")){localStorage.clear(); location.reload();}}
-function insertDate(){const d=new Date().toLocaleString(); editor.setRangeText("\n["+d+"]\n",editor.selectionStart,editor.selectionEnd,"end"); save();}
-function toggleDark(){dark=!dark; document.body.classList.toggle("light",!dark);}
 function changeFont(){editor.style.fontFamily=document.getElementById("fontFamily").value;}
 function changeSize(){editor.style.fontSize=document.getElementById("fontSize").value+"px";}
+function toggleBold(){editor.style.fontWeight = editor.style.fontWeight==='bold'?'normal':'bold';}
+function toggleItalic(){editor.style.fontStyle = editor.style.fontStyle==='italic'?'normal':'italic';}
+function toggleDark(){document.body.classList.toggle("light");}
+
+// Fordító Funkció
+async function translateText() {
+    const dir = document.getElementById("transDir").value.split('|');
+    const start = editor.selectionStart;
+    const end = editor.selectionEnd;
+    const sourceText = (start !== end) ? editor.value.substring(start, end) : editor.value;
+
+    if (!sourceText.trim()) return;
+
+    try {
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${dir[0]}&tl=${dir[1]}&dt=t&q=${encodeURIComponent(sourceText)}`);
+        const data = await res.json();
+        let translated = "";
+        data[0].forEach(item => { if(item[0]) translated += item[0]; });
+
+        if (start !== end) {
+            editor.setRangeText(translated, start, end, 'select');
+        } else {
+            editor.value = translated;
+        }
+        notes[current] = editor.value;
+        localStorage.setItem("MY_NOTES", JSON.stringify(notes));
+    } catch (e) {
+        alert("Hiba történt a fordítás közben.");
+    }
+}
+
+function speakText(){window.speechSynthesis.cancel(); const m=new SpeechSynthesisUtterance(editor.value); m.lang='hu-HU'; window.speechSynthesis.speak(m);}
+function stopSpeak(){window.speechSynthesis.cancel();}
+function emailNote(){window.location.href=`mailto:?subject=${current}&body=${encodeURIComponent(editor.value)}`;}
+
+function importTxt(){
+    fileInput.click();
+    fileInput.onchange=()=>{
+        const f=fileInput.files[0];
+        if(!f) return;
+        const r=new FileReader();
+        if(f.name.toLowerCase().endsWith('.zip')){
+            r.onload = e => {
+                JSZip.loadAsync(e.target.result).then(zip => {
+                    zip.forEach((path, file) => {
+                        if(!file.dir && path.endsWith('.txt')){
+                            file.async("string").then(content => {
+                                let n = path.replace(".txt","");
+                                notes[n] = content; current = n; refresh();
+                                localStorage.setItem("MY_NOTES",JSON.stringify(notes));
+                            });
+                        }
+                    });
+                });
+            };
+            r.readAsArrayBuffer(f);
+        } else {
+            r.onload=e=>{
+                let n = f.name.replace(".txt","");
+                notes[n]=e.target.result; current=n; refresh();
+                localStorage.setItem("MY_NOTES",JSON.stringify(notes));
+            };
+            r.readAsText(f, "UTF-8");
+        }
+    };
+}
 
 function downloadTxt(){const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([editor.value],{type:"text/plain"})); a.download=current+".txt"; a.click();}
-function importTxt(){fileInput.click(); fileInput.onchange=function(){const f=fileInput.files[0]; if(!f)return; const r=new FileReader(); r.onload=e=>{let n=f.name.replace(/\.txt$/i,""); let base=n,c=1; while(notes[n]){n=base+"_"+c;c++;} notes[n]=e.target.result; current=n; refresh(); save();}; r.readAsText(f,"UTF-8");};}
-function downloadPDF(){pdfHelper.style.fontFamily=editor.style.fontFamily; pdfHelper.style.fontSize=editor.style.fontSize; pdfHelper.style.background=dark?"#0e0e0e":"#f5f5f5"; pdfHelper.style.color=dark?"#eee":"#222"; pdfHelper.innerText=editor.value; html2canvas(pdfHelper,{scale:2}).then(c=>{const img=c.toDataURL("image/png"); const pdf=new jspdf.jsPDF(); const w=pdf.internal.pageSize.getWidth(); const h=(c.height*w)/c.width; pdf.addImage(img,"PNG",0,0,w,h); pdf.save(current+".pdf");});}
-function downloadAllZip(){if(!confirm("Az összes jegyzet egy ZIP fájlba kerül és letöltődik. Folytatod?")) return; const zip=new JSZip(); for(let n in notes){zip.file(n+".txt",notes[n]);} zip.generateAsync({type:"blob"}).then(content=>{const a=document.createElement("a"); a.href=URL.createObjectURL(content); a.download="All_Notes.zip"; a.click();});}
-function searchText(){let q=document.getElementById("search").value.toLowerCase(); let pos=editor.value.toLowerCase().indexOf(q); if(pos!==-1){editor.focus(); editor.setSelectionRange(pos,pos+q.length);}}
+function downloadAllZip(){const zip=new JSZip(); for(let n in notes){zip.file(n+".txt",notes[n]);} zip.generateAsync({type:"blob"}).then(c=>{const a=document.createElement("a"); a.href=URL.createObjectURL(c); a.download="Osszes_Jegyzet.zip"; a.click();});}
+
+function downloadPDF(){
+    const h=document.getElementById("pdf-helper");
+    h.style.fontFamily=editor.style.fontFamily; h.style.fontSize=editor.style.fontSize;
+    h.style.color=editor.style.color; h.style.fontWeight=editor.style.fontWeight; h.style.fontStyle=editor.style.fontStyle;
+    h.innerText=editor.value;
+    html2canvas(h).then(c=>{
+        const pdf=new jspdf.jsPDF();
+        pdf.addImage(c.toDataURL("image/png"),'PNG',0,0,210,(c.height*210)/c.width);
+        pdf.save(current+".pdf");
+    });
+}
+
+function undo(){ document.execCommand('undo'); }
+function redo(){ document.execCommand('redo'); }
+function searchText(){
+    let q=document.getElementById("search").value.toLowerCase();
+    let pos=editor.value.toLowerCase().indexOf(q);
+    if(pos!==-1){editor.focus(); editor.setSelectionRange(pos,pos+q.length);}
+}
+
+refresh(); updateStyles();
+editor.style.fontFamily="Arial"; editor.style.fontSize="25px";
 </script>
 </body>
 </html>
