@@ -1,16 +1,179 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="hu" translate="no" class="notranslate">
 <head>
 <meta charset="UTF-8">
-<title>Végtelen Jegyzet PRO - STABLE V.01</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<meta name="google" content="notranslate">
+<meta name="googlebot" content="notranslate">
+<meta http-equiv="Content-Language" content="hu">
+<title>Végtelen Jegyzet PRO - Magyar - STABLE V.02</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
+// VÉGZETÚR 4 VÁLASZ - EGYSZERŰ MŰKÖDŐ
+const VDB = {
+"egyedul a felhők felett": "Antoine de Saint-Exupéry",
+"ejszakai repules": "Antoine de Saint-Exupéry",
+"kis herceg": "Antoine de Saint-Exupéry",
+"egri csillagok": "Gárdonyi Géza",
+"pal utcai fiuk": "Molnár Ferenc",
+"toldi": "Arany János",
+"janos vitez": "Petőfi Sándor",
+"legy jo mindhalalig": "Móricz Zsigmond",
+"ember tragediája": "Madách Imre",
+"koszivu ember fiai": "Jókai Mór",
+"arany ember": "Jókai Mór",
+"himnusz": "Kölcsey Ferenc",
+"szózat": "Vörösmarty Mihály",
+"bank ban": "Katona József"
+};
+function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim(); }
+function checkVegzetur(){
+    let q=document.getElementById('vq').value.trim();
+    let a1=document.getElementById('va1').value.trim();
+    let a2=document.getElementById('va2').value.trim();
+    let a3=document.getElementById('va3').value.trim();
+    let a4=document.getElementById('va4').value.trim();
+    let opts=[a1,a2,a3,a4].filter(x=>x);
+    if(!q || opts.length<2){ alert('Kérdés + legalább 2 válasz kell'); return; }
+    let nq=norm(q);
+    let found=null;
+    for(let k in VDB){ if(nq.includes(norm(k))){ found=VDB[k]; break; } }
+    let resDiv=document.getElementById('vres');
+    resDiv.style.display='block';
+    document.getElementById('vq_show').innerText=q;
+    let optsDiv=document.getElementById('vopts');
+    optsDiv.innerHTML='';
+    let correct=null;
+    if(found){
+        for(let o of opts){ if(norm(o).includes(norm(found).slice(0,6)) || norm(found).includes(norm(o).slice(0,6))){ correct=o; break; } }
+        if(!correct){
+            let best=0;
+            for(let o of opts){ let sc=0; norm(found).split(' ').forEach(w=>{ if(w.length>3 && norm(o).includes(w)) sc++; }); if(sc>best){ best=sc; correct=o; } }
+        }
+    }
+    document.getElementById('va_show').innerText = correct ? "✅ "+correct : (found ? found : "❓ Nincs DB-ben - tipp: "+opts[0]);
+    opts.forEach((o,i)=>{
+        let d=document.createElement('div');
+        let isC = o===correct;
+        d.style.cssText = isC ? 'background:#00ff00; color:#000; font-weight:bold; padding:8px; margin:4px 0; border-radius:6px;' : 'background:#222; color:#ddd; padding:8px; margin:4px 0; border-radius:6px; border:1px solid #444;';
+        d.innerText = String.fromCharCode(65+i)+") "+o + (isC ? " ✅" : "");
+        optsDiv.appendChild(d);
+    });
+}
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
+// VÉGZETÚR 4 VÁLASZ - EGYSZERŰ MŰKÖDŐ
+const VDB = {
+"egyedul a felhők felett": "Antoine de Saint-Exupéry",
+"ejszakai repules": "Antoine de Saint-Exupéry",
+"kis herceg": "Antoine de Saint-Exupéry",
+"egri csillagok": "Gárdonyi Géza",
+"pal utcai fiuk": "Molnár Ferenc",
+"toldi": "Arany János",
+"janos vitez": "Petőfi Sándor",
+"legy jo mindhalalig": "Móricz Zsigmond",
+"ember tragediája": "Madách Imre",
+"koszivu ember fiai": "Jókai Mór",
+"arany ember": "Jókai Mór",
+"himnusz": "Kölcsey Ferenc",
+"szózat": "Vörösmarty Mihály",
+"bank ban": "Katona József"
+};
+function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim(); }
+function checkVegzetur(){
+    let q=document.getElementById('vq').value.trim();
+    let a1=document.getElementById('va1').value.trim();
+    let a2=document.getElementById('va2').value.trim();
+    let a3=document.getElementById('va3').value.trim();
+    let a4=document.getElementById('va4').value.trim();
+    let opts=[a1,a2,a3,a4].filter(x=>x);
+    if(!q || opts.length<2){ alert('Kérdés + legalább 2 válasz kell'); return; }
+    let nq=norm(q);
+    let found=null;
+    for(let k in VDB){ if(nq.includes(norm(k))){ found=VDB[k]; break; } }
+    let resDiv=document.getElementById('vres');
+    resDiv.style.display='block';
+    document.getElementById('vq_show').innerText=q;
+    let optsDiv=document.getElementById('vopts');
+    optsDiv.innerHTML='';
+    let correct=null;
+    if(found){
+        for(let o of opts){ if(norm(o).includes(norm(found).slice(0,6)) || norm(found).includes(norm(o).slice(0,6))){ correct=o; break; } }
+        if(!correct){
+            let best=0;
+            for(let o of opts){ let sc=0; norm(found).split(' ').forEach(w=>{ if(w.length>3 && norm(o).includes(w)) sc++; }); if(sc>best){ best=sc; correct=o; } }
+        }
+    }
+    document.getElementById('va_show').innerText = correct ? "✅ "+correct : (found ? found : "❓ Nincs DB-ben - tipp: "+opts[0]);
+    opts.forEach((o,i)=>{
+        let d=document.createElement('div');
+        let isC = o===correct;
+        d.style.cssText = isC ? 'background:#00ff00; color:#000; font-weight:bold; padding:8px; margin:4px 0; border-radius:6px;' : 'background:#222; color:#ddd; padding:8px; margin:4px 0; border-radius:6px; border:1px solid #444;';
+        d.innerText = String.fromCharCode(65+i)+") "+o + (isC ? " ✅" : "");
+        optsDiv.appendChild(d);
+    });
+}
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js">
+// VÉGZETÚR 4 VÁLASZ - EGYSZERŰ MŰKÖDŐ
+const VDB = {
+"egyedul a felhők felett": "Antoine de Saint-Exupéry",
+"ejszakai repules": "Antoine de Saint-Exupéry",
+"kis herceg": "Antoine de Saint-Exupéry",
+"egri csillagok": "Gárdonyi Géza",
+"pal utcai fiuk": "Molnár Ferenc",
+"toldi": "Arany János",
+"janos vitez": "Petőfi Sándor",
+"legy jo mindhalalig": "Móricz Zsigmond",
+"ember tragediája": "Madách Imre",
+"koszivu ember fiai": "Jókai Mór",
+"arany ember": "Jókai Mór",
+"himnusz": "Kölcsey Ferenc",
+"szózat": "Vörösmarty Mihály",
+"bank ban": "Katona József"
+};
+function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim(); }
+function checkVegzetur(){
+    let q=document.getElementById('vq').value.trim();
+    let a1=document.getElementById('va1').value.trim();
+    let a2=document.getElementById('va2').value.trim();
+    let a3=document.getElementById('va3').value.trim();
+    let a4=document.getElementById('va4').value.trim();
+    let opts=[a1,a2,a3,a4].filter(x=>x);
+    if(!q || opts.length<2){ alert('Kérdés + legalább 2 válasz kell'); return; }
+    let nq=norm(q);
+    let found=null;
+    for(let k in VDB){ if(nq.includes(norm(k))){ found=VDB[k]; break; } }
+    let resDiv=document.getElementById('vres');
+    resDiv.style.display='block';
+    document.getElementById('vq_show').innerText=q;
+    let optsDiv=document.getElementById('vopts');
+    optsDiv.innerHTML='';
+    let correct=null;
+    if(found){
+        for(let o of opts){ if(norm(o).includes(norm(found).slice(0,6)) || norm(found).includes(norm(o).slice(0,6))){ correct=o; break; } }
+        if(!correct){
+            let best=0;
+            for(let o of opts){ let sc=0; norm(found).split(' ').forEach(w=>{ if(w.length>3 && norm(o).includes(w)) sc++; }); if(sc>best){ best=sc; correct=o; } }
+        }
+    }
+    document.getElementById('va_show').innerText = correct ? "✅ "+correct : (found ? found : "❓ Nincs DB-ben - tipp: "+opts[0]);
+    opts.forEach((o,i)=>{
+        let d=document.createElement('div');
+        let isC = o===correct;
+        d.style.cssText = isC ? 'background:#00ff00; color:#000; font-weight:bold; padding:8px; margin:4px 0; border-radius:6px;' : 'background:#222; color:#ddd; padding:8px; margin:4px 0; border-radius:6px; border:1px solid #444;';
+        d.innerText = String.fromCharCode(65+i)+") "+o + (isC ? " ✅" : "");
+        optsDiv.appendChild(d);
+    });
+}
+
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Abel&family=Abril+Fatface&family=Acme&family=Alegreya&family=Alex+Brush&family=Alfa+Slab+One&family=Alice&family=Alumni+Sans+Inline+One&family=Amatic+SC&family=Amita&family=Antic+Didone&family=Anton&family=Architects+Daughter&family=Archivo+Black&family=Are+You+Serious&family=Arima+Madurai&family=Arvo&family=Asap&family=Asset&family=Atomic+Age&family=Audiowide&family=Bangers&family=Barlow+Condensed&family=Bebas+Neue&family=Berkshire+Swash&family=Bevan&family=Bigelow+Rules&family=Black+Ops+One&family=Bonbon&family=Boogaloo&family=Bowlby+One+SC&family=Bungee+Shade&family=Butcherman&family=Cabin+Sketch&family=Caesar+Dressing&family=Carter+One&family=Caveat&family=Cinzel+Decorative&family=Codystar&family=Comfortaa&family=Coming+Soon&family=Concert+One&family=Cookie&family=Courgette&family=Creepster&family=Dancing+Script&family=Diplomata+SC&family=Domine&family=Eater&family=EB+Garamond&family=Emblema+One&family=Ewert&family=Fascinate+Inline&family=Faster+One&family=Finger+Paint&family=Flavors&family=Fontdiner+Swanky&family=Fredericka+the+Great&family=Frijole&family=Fugaz+One&family=Glass+Antiqua&family=Gloria+Hallelujah&family=Gochi+Hand&family=Great+Vibes&family=Grenze+Gotisch&family=Griffy&family=Handlee&family=Henny+Penny&family=Iceberg&family=Indie+Flower&family=Irish+Grover&family=Italianno&family=Jolly+Lodger&family=Kaushan+Script&family=Kelly+Slab&family=Kranky&family=Kumar+One&family=Lobster&family=Londrina+Shadow&family=Luckiest+Guy&family=Macondo&family=MedievalSharp&family=Megrim&family=Metal+Mania&family=Modak&family=Monoton&family=Mountains+of+Christmas&family=Mystery+Quest&family=Nabla&family=Nosifer&family=Nothing+You+Could+Do&family=Orbitron&family=Pacifico&family=Parisienne&family=Permanent+Marker&family=Pinyon+Script&family=Playfair+Display&family=Press+Start+2P&family=Righteous&family=Rubik+Glitch&family=Sacramento&family=Satisfy&family=Shadows+Into+Light&family=Silkscreen&family=Special+Elite&family=Syncopate&family=Ultra&family=UnifrakturMaguntia&family=VT323&family=Wallpoet&family=Zeyada&family=Montserrat&family=Nunito&family=Oswald&family=Spectral&family=Varela+Round&family=Roboto+Serif&family=Roboto+Mono&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0c0c0c;--panel:#141414;--text:#ddd;--border:#333;--accent:#00ff00;--val-color:#00ffff;}
 .light{--bg:#f0f0f0;--panel:#e0e0e0;--text:#111;--border:#ccc;--accent:#008800;--val-color:#0000ff;}
 body { margin: 0; font-family: Arial, sans-serif; background-color: var(--bg); color: var(--text); overflow: hidden; }
-#neon-id { color: #ffff00; text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; font-weight: bold; font-family: 'Orbitron', sans-serif; padding: 0 25px; font-size: 24px; }
+#neon-id { color: #0088ff; font-weight: bold; font-family: 'Orbitron', sans-serif; padding: 0 25px; font-size: 24px; }
 .color-green { color: #55ff55 !important; }
 .color-cyan { color: #55ffff !important; }
 .color-red { color: #ff5555 !important; }
@@ -37,22 +200,62 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
 #htmlCode { width:100%; height:100%; border:none; padding:15px; font-family:monospace; font-size:15px; resize:none; outline:none; }
 #resultFrame { width:100%; height:100%; border:none; background:white; }
 .close-html { background:#ff5555; color:white; border:none; padding:5px 15px; cursor:pointer; font-weight:bold; }
+/* PONTOSAN IGY NEZZEN KI - KEP ALAPJAN - V02 MAGENTA */
+#ocr-overlay, #gta-overlay, #also-kep-overlay, #teljes-kep-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.96); z-index:3000; justify-content:center; align-items:flex-start; overflow-y:auto; padding:10px 0; }
+#also-kep-overlay{ z-index:3100; }
+#teljes-kep-overlay{ z-index:3200; }
+.modal-box { background:#0c0c0c; border:2px solid #00ff00; border-radius:12px; width:680px; max-width:96%; color:#ddd; box-shadow:0 0 25px rgba(0,255,0,0.5), inset 0 0 20px rgba(0,255,0,0.05); max-height:96vh; overflow-y:auto; display:flex; flex-direction:column; }
+.modal-header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid #1a1a1a; background:#0a0a0a; border-radius:12px 12px 0 0; }
+.modal-header h3 { margin:0; color:#00ff00; font-size:16px; font-weight:bold; letter-spacing:0.5px; text-transform:uppercase; }
+.modal-close { background:#1a1a1a; color:#666; width:28px; height:28px; border-radius:50%; border:1px solid #333; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.modal-close:hover { background:#333; color:white; }
+.dashed-container { margin:12px; border:1px dashed #444; border-radius:8px; background:#080808; padding:8px; position:relative; }
+.ocr-dropzone { border:none; padding:0; text-align:center; margin:0; background:transparent; display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:240px; cursor:pointer; }
+.ocr-preview { max-width:100%; max-height:340px; display:none; border-radius:4px; object-fit:contain; width:100%; }
+.file-info-bar { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#666; margin-top:8px; padding:0 4px; }
+.file-info-bar .percent { color:#00ff00; font-weight:bold; font-size:11px; }
+#ocr-status, #also-kep-status-wrap, #teljes-kep-status-wrap { margin:10px 12px; background:#0a1a0a; border:1px solid #1a3a1a; padding:10px 12px; border-radius:6px; font-size:13px; color:#00ff00; display:flex; align-items:center; gap:8px; }
+.status-dot { width:8px; height:8px; background:#00ff00; border-radius:50%; box-shadow:0 0 6px #00ff00; }
+.result-box { display:flex; gap:10px; margin:10px 12px; }
+.orig-box { flex:1; background:#0a0a0a; border:1px solid #222; padding:12px; border-radius:8px; min-height:90px; }
+.orig-box strong { color:#555; font-size:11px; text-transform:uppercase; }
+#ocr-original, #also-kep-original, #teljes-kep-original { color:#ccc; font-size:13px; margin-top:12px; display:block; }
+.badge { font-size:10px; color:#444; background:#111; padding:3px 8px; border-radius:4px; border:1px solid #222; margin-top:10px; display:inline-block; }
+.hungarian-box { flex:1; background:linear-gradient(135deg, #1a1500, #2a2000); border:1px solid #ffcc00; padding:12px; border-radius:8px; min-height:90px; box-shadow:0 0 20px rgba(255,204,0,0.15); }
+.hungarian-box strong { color:#ffcc00; font-size:11px; text-transform:uppercase; }
+#ocr-translated { color:#ffff00; font-size:15px; font-weight:bold; margin-top:12px; display:block; text-shadow:none; }
+.bottom-blue-box { margin:10px 12px; border:1px solid #0055aa; background:linear-gradient(135deg, #000a1a, #001a33); padding:12px; border-radius:8px; min-height:50px; }
+.bottom-blue-box strong { color:#0080ff; font-size:11px; text-transform:uppercase; }
+#bottom-blue-text { color:#3399ff; font-size:13px; font-weight:bold; margin-top:8px; display:block; }
+.modal-footer { display:flex; justify-content:flex-end; gap:10px; padding:12px; border-top:1px solid #1a1a1a; background:#0a0a0a; border-radius:0 0 12px 12px; margin-top:10px; }
+.btn-close { background:#2a2a2a; color:#aaa; border:1px solid #333; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
+.btn-apply { background:#00cc00; color:white; font-weight:bold; border:none; padding:8px 18px; border-radius:6px; cursor:pointer; font-size:13px; text-transform:uppercase; box-shadow:0 0 10px rgba(0,255,0,0.3); }
+.gta-percent-btn { background:linear-gradient(135deg,#ffcc00,#ff8800) !important; color:#000 !important; font-weight:bold !important; border:2px solid #ffcc00 !important; }
+/* 1-es lime zöld neon */
+.hu-neon-box-lime { background: radial-gradient(ellipse at center, #002266 0%, #001133 100%) !important; border: 2px solid #0088ff !important; box-shadow: 0 0 15px rgba(0,136,255,0.8), 0 0 30px rgba(0,136,255,0.4), inset 0 0 20px rgba(0,100,255,0.2) !important; }
+.hu-neon-text-lime { color: #84ff00 !important; font-size: 20px !important; font-weight: 600 !important; text-shadow:none; }
+/* 2-es magenta */
+.hu-neon-box-magenta { background: radial-gradient(ellipse at center, #002266 0%, #001133 100%) !important; border: 2px solid #0088ff !important; box-shadow: 0 0 15px rgba(0,136,255,0.8), 0 0 30px rgba(0,136,255,0.4), inset 0 0 20px rgba(0,100,255,0.2) !important; }
+.hu-neon-text-magenta { color: #ff00ff !important; font-size: 20px !important; font-weight: 600 !important; text-shadow:none; }
 </style>
 </head>
-<body class="zenburn-mode">
+<body class="zenburn-mode notranslate" translate="no">
 
 <div id="topbar">
-    <div id="neon-id">Securics-08-TXT-Save_STABLE_V.01</div> 
-    
+    <div id="neon-id">Securics-08-TXT-Save_STABLE_V.03</div> 
     <div class="group">
         <select id="notes" onchange="switchNote()"></select> <button onclick="newNote()">+ Új</button> 
     </div>
-
     <div class="group">
-        <button onclick="openHtmlEditor()" class="color-cyan">🛠️ HTML Szerkesztő</button> 
+        <button onclick="openHtmlEditor()" class="color-cyan">🛠 HTML Szerkesztő</button> 
         <button onclick="insertTimestamp()" class="color-red">📅 Dátum</button>
+        <button onclick="openGtaModal()" class="gta-percent-btn">🎮 GTA 5% MENÜ - FOTO FORDITO</button>
+        <button onclick="document.getElementById('vegzetur-overlay').style.display='flex'" style="color:#ffcc00; border:2px solid #ffcc00;">🟡 Végzetúr Kvíz</button>
+        <button onclick="openAlsoKepModal()" style="color:#00ff00; border:2px solid #00ff00;">🟡 Végzetúr Kvíz</button>
+        <button onclick="document.getElementById('vegzetur-overlay').style.display='flex'" style="color:#ffcc00; border:2px solid #ffcc00;">🟡 Végzetúr Kvíz</button>
+        <button onclick="openAlsoKepModal()" style="color:#00ff00; border:2px solid #00ff00;">🟩 Alsókép</button>
+        <button onclick="openTeljesKepModal()" style="color:#ff00ff; border:2px solid #ff00ff;">🟪 Teljeskép</button>
     </div>
-
     <div class="group">
         <select id="fontFamily" onchange="changeFont()"></select> 
         <input type="number" id="fontSize" value="25" min="8" max="150" style="width:60px" oninput="changeSize()"> 
@@ -60,7 +263,6 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
         <button onclick="toggleItalic()" class="color-cyan"><i>/</i></button> 
         <button onclick="toggleUnderline()" class="color-red"><u>U</u></button> 
     </div>
-
     <div class="group">
         <input type="color" id="textColor" value="#eeeeee" oninput="updateStyles()"> 
         <input type="color" id="bgColor" value="#000000" oninput="updateStyles()"> 
@@ -68,26 +270,22 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
         <button onclick="speakText()">🔊</button> <button onclick="stopSpeak()" style="background:#800000; color:white">■</button> 
         <button onclick="setZenburn(true)">🎨 Z</button> <button onclick="setZenburn(false)">⚪ N</button> 
     </div>
-
     <div class="group">
         <select id="transDir">
             <option value="hu|en">Magyar ➡ Angol</option>
             <option value="en|hu">Angol ➡ Magyar</option>
         </select> <button onclick="translateText()" class="color-green">🌐 Fordítás</button> 
+        <button onclick="openOcrModal()" class="color-cyan" style="border-color:#00ffff;">📷 Képfordító MAGYARRA</button>
     </div>
-
     <div class="group">
-        <button onclick="exportJSON()">✉️ Küldés</button> <button onclick="toggleDark()">🌗 Mód</button> <button onclick="undo()">⬅️ Vissza</button> <button onclick="redo()">➡️ Előre</button> 
+        <button onclick="exportJSON()">✉ Küldés</button> <button onclick="toggleDark()">🌗 Mód</button> <button onclick="undo()">⬅ Vissza</button> <button onclick="redo()">➡ Előre</button> 
     </div>
-
     <div class="group">
-        <button onclick="importFiles()" class="success-import">📁 Import</button> <button onclick="saveIni()" style="color:#ffcc00">📜 INI</button> <button onclick="downloadPDF()" style="color:#ff5555">📄 PDF</button> <button onclick="downloadTxt()" style="color:#ff55ff">⬇️ TXT</button> <button onclick="downloadAllZip()" style="color:#55ff55">📦 ZIP</button> 
+        <button onclick="importFiles()" class="success-import">📁 Import</button> <button onclick="saveIni()" style="color:#ffcc00">📜 INI</button> <button onclick="downloadPDF()" style="color:#ff5555">📄 PDF</button> <button onclick="downloadTxt()" style="color:#ff55ff">⬇ TXT</button> <button onclick="downloadAllZip()" style="color:#55ff55">📦 ZIP</button> 
     </div>
-
     <div class="group">
-        <button onclick="deleteCurrent()" class="color-red">🗑️ Töröl</button> <button onclick="resetApp()" class="danger-reset">⚠️ RESET</button> 
+        <button onclick="deleteCurrent()" class="color-red">🗑 Töröl</button> <button onclick="resetApp()" class="danger-reset">⚠ RESET</button> 
     </div>
-
     <input id="search" placeholder="Keresés..." oninput="searchText()"> 
 </div>
 
@@ -118,78 +316,125 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
     </div>
 </div>
 
+<!-- EREDETI OCR -->
+<div id="ocr-overlay" class="notranslate" translate="no">
+    <div class="modal-box">
+        <div class="modal-header"><h3>FÉNYKÉPEN LÉVŐ SZÖVEG → MAGYARRA FORDÍTÁS</h3><button onclick="closeOcrModal()" class="modal-close">✕</button></div>
+        <div class="dashed-container">
+            <div class="ocr-dropzone" id="ocr-dropzone" onclick="document.getElementById('ocr-file').click()">
+                <div id="dropzone-placeholder" style="color:#555;"><div style="font-size:32px;">📷</div><div style="font-size:13px; margin-top:8px;">Kattints vagy húzd ide a képet</div></div>
+                <input type="file" id="ocr-file" accept="image/*" style="display:none" onchange="handleOcrFile(this.files[0])">
+                <img id="ocr-img-preview" class="ocr-preview">
+            </div>
+            <div class="file-info-bar" id="ocr-file-info" style="display:none;"><span id="ocr-filename"></span><span class="percent" id="ocr-percent">100% FELISMERME</span></div>
+        </div>
+        <div id="ocr-status" style="display:none;"><span class="status-dot"></span> <span id="ocr-status-text">Kész!</span></div>
+        <div class="result-box" id="result-box" style="display:none;">
+            <div class="orig-box"><strong>EREDETI (FÉNYKÉPRŐL):</strong><span id="ocr-original" class="notranslate" translate="no"></span><br><span class="badge">EN → detektálva</span></div>
+            <div class="hungarian-box"><strong>MAGYAR FORDÍTÁS (SÁRGA):</strong><span id="ocr-translated"></span></div>
+        </div>
+        <div id="bottom-blue-box" class="bottom-blue-box" style="display:none;"><strong>KÜLDETÉS LEÍRÁSA - KÉP ALJÁN KÖZÉPEN (KÉK):</strong><span id="bottom-blue-text" class="notranslate" translate="no"></span></div>
+        <div class="modal-footer"><button onclick="closeOcrModal()" class="btn-close">Bezárás</button><button onclick="applyTranslation()" class="btn-apply" id="btn-apply" style="display:none;">BESZÚRÁS JEGYZETBE</button></div>
+    </div>
+</div>
+
+<div id="gta-overlay" class="notranslate" translate="no">
+    <div class="modal-box" style="border-color:#ffcc00; box-shadow:0 0 25px rgba(255,204,0,0.4);">
+        <div style="display:flex; justify-content:space-between; align-items:center;"><h3 style="margin:0; color:#ffcc00;">🎮 GTA 5% MENÜ - Fénykép Fordító Modul</h3><button onclick="closeGtaModal()" style="background:#800000;color:white;padding:6px 14px;font-weight:bold;border:none;border-radius:4px;cursor:pointer;">X</button></div>
+        <p style="font-size:13px; color:#aaa; margin-top:12px;">Ez a menü a <b>fényképen található szöveget</b> fordítja magyarra!</p>
+        <div style="background:#000; padding:14px; border:1px solid #333; font-size:13px; border-radius:6px;"><div style="display:flex; gap:15px;"><div style="flex:1;"><strong style="color:#888;">Fényképről:</strong><br><i style="color:#ccc;">You can challenge another player to an Impromptu Race using the Interaction Menu.</i></div><div style="flex:1; border-left:1px solid #333; padding-left:12px;"><strong style="color:#00ff00;">Magyarul:</strong><br><b style="color:#ffff55;">Kihívhatsz egy másik játékost egy rögtönzött versenyre az Interakciós menü segítségével.</b></div></div></div>
+        <div style="display:flex; gap:10px; margin-top:18px; justify-content:space-between;"><button onclick="openOcrModal(); closeGtaModal();" style="background:#00aa00; color:#fff; font-weight:bold; padding:10px 16px; border:none; border-radius:4px; cursor:pointer;">📷 Kép feltöltés + Magyar fordítás</button><div style="display:flex; gap:8px;"><button onclick="downloadGtaBotScript()" style="background:#ffcc00; color:#000; font-weight:bold; padding:10px 16px; border:none; border-radius:4px; cursor:pointer;">⬇ Python Bot (.py) letöltése</button><button onclick="closeGtaModal()" style="padding:10px 16px;">Bezárás</button></div></div>
+    </div>
+</div>
+
+<!-- 1-es ALSÓKÉP MODAL -->
+<div id="also-kep-overlay" class="notranslate" translate="no">
+    <div class="modal-box" style="border-color:#00ff00; box-shadow:0 0 25px rgba(0,255,0,0.5);">
+        <div class="modal-header" style="border-bottom:1px solid #00ff0040;"><h3 style="color:#00ff00;">🟡 Végzetúr Kvíz</button>
+        <button onclick="document.getElementById('vegzetur-overlay').style.display='flex'" style="color:#ffcc00; border:2px solid #ffcc00;">🟡 Végzetúr Kvíz</button>
+        <button onclick="openAlsoKepModal()" style="color:#00ff00; border:2px solid #00ff00;">🟩 Alsókép - Alsó középső kocka + Lime zöld (1-es)</h3><button onclick="closeAlsoKepModal()" class="modal-close">✕</button></div>
+        <div class="dashed-container" style="border-color:#00ff0040;">
+            <div class="ocr-dropzone" onclick="document.getElementById('also-kep-file').click()">
+                <div id="also-drop-placeholder" style="color:#555;"><div style="font-size:32px;">🟩</div><div style="font-size:13px; margin-top:8px;">Kattints vagy húzd ide a képet - ALSÓ KÖZÉPSŐ kocka</div><div style="font-size:11px; margin-top:4px; color:#00ff00;">6 részre osztva, csak 5-ös kocka alsó 30%</div></div>
+                <input type="file" id="also-kep-file" accept="image/*" style="display:none" onchange="handleAlsoKepFile(this.files[0])">
+                <img id="also-kep-preview" class="ocr-preview">
+            </div>
+            <div class="file-info-bar" id="also-file-info" style="display:none;"><span id="also-filename"></span><span class="percent" id="also-kep-percent" style="color:#00ff00;">0%</span></div>
+        </div>
+        <div id="also-kep-status-wrap" style="display:none; border-color:#00ff0040; background:#0a1a0a;"><span class="status-dot" style="background:#00ff00; box-shadow:0 0 6px #00ff00;"></span><span id="also-kep-status-text" style="color:#00ff00;">Várakozás...</span></div>
+        <div class="result-box" id="also-result-box" style="display:none;">
+            <div class="orig-box"><strong>EREDETI (ALSÓ KÉP):</strong><span id="also-kep-original" class="notranslate" translate="no"></span><br><span class="badge">EN → 5-ös kocka</span></div>
+            <div class="hungarian-box hu-neon-box-lime"><strong style="color:#0088ff;">MAGYAR FORDÍTÁS (LIME 20px):</strong><span id="also-kep-translated" class="hu-neon-text-lime"></span></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeAlsoKepModal()" class="btn-close">Bezárás</button><button onclick="applyAlsoKep()" class="btn-apply" id="also-btn-apply" style="display:none; background:#00ff00; color:#000;">BESZÚRÁS JEGYZETBE</button></div>
+    </div>
+</div>
+
+<!-- 2-es TELJESKÉP MODAL -->
+<div id="teljes-kep-overlay" class="notranslate" translate="no">
+    <div class="modal-box" style="border-color:#ff00ff; box-shadow:0 0 25px rgba(255,0,255,0.5);">
+        <div class="modal-header" style="border-bottom:1px solid #ff00ff40;"><h3 style="color:#ff00ff;">🟪 Teljeskép - Teljes kép + Magenta (2-es)</h3><button onclick="closeTeljesKepModal()" class="modal-close">✕</button></div>
+        <div class="dashed-container" style="border-color:#ff00ff40;">
+            <div class="ocr-dropzone" onclick="document.getElementById('teljes-kep-file').click()">
+                <div id="teljes-drop-placeholder" style="color:#555;"><div style="font-size:32px;">🟪</div><div style="font-size:13px; margin-top:8px;">Kattints vagy húzd ide a képet - TELJES KÉP</div><div style="font-size:11px; margin-top:4px; color:#ff00ff;">Teljes kép előfeldolgozás + szűrés</div></div>
+                <input type="file" id="teljes-kep-file" accept="image/*" style="display:none" onchange="handleTeljesKepFile(this.files[0])">
+                <img id="teljes-kep-preview" class="ocr-preview">
+            </div>
+            <div class="file-info-bar" id="teljes-file-info" style="display:none;"><span id="teljes-filename"></span><span class="percent" id="teljes-kep-percent" style="color:#ff00ff;">0%</span></div>
+        </div>
+        <div id="teljes-kep-status-wrap" style="display:none; border-color:#ff00ff40; background:#1a0a1a;"><span class="status-dot" style="background:#ff00ff; box-shadow:0 0 6px #ff00ff;"></span><span id="teljes-kep-status-text" style="color:#ff00ff;">Várakozás...</span></div>
+        <div class="result-box" id="teljes-result-box" style="display:none;">
+            <div class="orig-box"><strong>EREDETI (TELJES KÉP):</strong><span id="teljes-kep-original" class="notranslate" translate="no"></span><br><span class="badge">EN → teljes kép</span></div>
+            <div class="hungarian-box hu-neon-box-magenta"><strong style="color:#0088ff;">MAGYAR FORDÍTÁS (MAGENTA 20px):</strong><span id="teljes-kep-translated" class="hu-neon-text-magenta"></span></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeTeljesKepModal()" class="btn-close">Bezárás</button><button onclick="applyTeljesKep()" class="btn-apply" id="teljes-btn-apply" style="display:none; background:#ff00ff;">BESZÚRÁS JEGYZETBE</button></div>
+    </div>
+</div>
+
 <script>
+// === EREDETI KÓD 100% - NEM VÁLTOZTATVA ===
 const rawFonts = ["Abel","Abril Fatface","Acme","Alegreya","Alex Brush","Alfa Slab One","Alice","Alumni Sans Inline One","Amatic SC","Amita","Antic Didone","Anton","Architects Daughter","Archivo Black","Are You Serious","Arial","Arima Madurai","Arvo","Asap","Asset","Atomic Age","Audiowide","Bangers","Barlow Condensed","Bebas Neue","Berkshire Swash","Bevan","Bigelow Rules","Black Ops One","Bonbon","Boogaloo","Bowlby One SC","Bungee Shade","Butcherman","Cabin Sketch","Caesar Dressing","Carter One","Caveat","Cinzel Decorative","Codystar","Comfortaa","Coming Soon","Concert One","Cookie","Courgette","Creepster","Dancing Script","Diplomata SC","Domine","Eater","EB Garamond","Emblema One","Ewert","Fascinate Inline","Faster One","Finger Paint","Flavors","Fontdiner Swanky","Fredericka the Great","Frijole","Fugaz One","Glass Antiqua","Gloria Hallelujah","Gochi Hand","Great Vibes","Grenze Gotisch","Griffy","Handlee","Henny Penny","Iceberg","Indie Flower","Irish Grover","Italianno","Jolly Lodger","Kaushan Script","Kelly Slab","Kranky","Kumar One","Lobster","Londrina Shadow","Luckiest Guy","Macondo","MedievalSharp","Megrim","Metal Mania","Modak","Monoton","Mountains of Christmas","Mystery Quest","Nabla","Nosifer","Nothing You Could Do","Orbitron","Pacifico","Parisienne","Permanent Marker","Pinyon Script","Playfair Display","Press Start 2P","Righteous","Rubik Glitch","Sacramento","Satisfy","Shadows Into Light","Silkscreen","Special Elite","Syncopate","Ultra","UnifrakturMaguntia","VT323","Wallpoet","Zeyada","Montserrat","Nunito","Oswald","Spectral","Varela Round","Roboto Serif","Roboto Mono"];
 const fontColors = ["#ff5555", "#55ff55", "#5555ff", "#ffff55", "#ff55ff", "#55ffff", "#ffaa00", "#ff00aa", "#aa00ff", "#00ffaa"];
-
 let db; let notes = {}; let current = "";
 const request = indexedDB.open("NotesUltraDB", 1);
 request.onupgradeneeded = e => { db = e.target.result; db.createObjectStore("notes"); };
 request.onsuccess = e => { db = e.target.result; loadFromDB(); };
-
 function loadFromDB() {
     const transaction = db.transaction(["notes"], "readonly");
     const store = transaction.objectStore("notes");
     const req = store.get("all_notes");
     req.onsuccess = () => {
         notes = req.result || {"Üdvözlő!!!": "Készen állunk!"};
-        // F5 után töltsük be az utoljára megnyitottat
         const lastOpened = localStorage.getItem('lastOpenedNote');
-        if (lastOpened && notes[lastOpened] !== undefined) {
-            current = lastOpened;
-        } else {
-            current = Object.keys(notes)[0];
-        }
+        if (lastOpened && notes[lastOpened] !== undefined) { current = lastOpened; } else { current = Object.keys(notes)[0]; }
         refresh();
     };
 }
 function saveData() { if (!db) return; const transaction = db.transaction(["notes"], "readwrite"); transaction.objectStore("notes").put(notes, "all_notes"); }
 function handleInput() { notes[current] = document.getElementById("editor").value; applyHighlight(); updateStats(); saveData(); }
 function handlePaste() { setTimeout(handleInput, 0); }
-
 function insertTimestamp() {
     const now = new Date();
-    // Nincs szögletes zárójel
     const ts = `\n${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}\n`;
-    const ed = document.getElementById("editor");
-    ed.value += ts;
-    handleInput();
-    ed.scrollTop = ed.scrollHeight;
+    const ed = document.getElementById("editor"); ed.value += ts; handleInput(); ed.scrollTop = ed.scrollHeight;
 }
-
 function refresh() {
-    const select = document.getElementById("notes");
-    select.innerHTML = "";
-    Object.keys(notes).forEach((n, i) => {
-        let o = document.createElement("option"); o.value = n; o.textContent = n;
-        o.style.color = fontColors[i % fontColors.length];
-        select.appendChild(o);
-    });
-    select.value = current;
-    document.getElementById("editor").value = notes[current] || "";
-    applyHighlight(); updateStats();
-    localStorage.setItem('lastOpenedNote', current); // Mentjük melyik van nyitva
+    const select = document.getElementById("notes"); select.innerHTML = "";
+    Object.keys(notes).forEach((n, i) => { let o = document.createElement("option"); o.value = n; o.textContent = n; o.style.color = fontColors[i % fontColors.length]; select.appendChild(o); });
+    select.value = current; document.getElementById("editor").value = notes[current] || ""; applyHighlight(); updateStats(); localStorage.setItem('lastOpenedNote', current);
 }
 function switchNote() { current = document.getElementById("notes").value; refresh(); }
 function newNote() { let n = prompt("Név:"); if (n) { notes[n] = ""; current = n; refresh(); saveData(); } }
 function deleteCurrent() { if (confirm("Törlöd ezt a jegyzetet?")) { delete notes[current]; current = Object.keys(notes)[0] || "Üdvözlő!!!"; refresh(); saveData(); } }
 function resetApp() { if (confirm("MINDEN törlődik!")) { const t = db.transaction(["notes"], "readwrite"); t.objectStore("notes").clear(); localStorage.clear(); location.reload(); } }
-
 function applyHighlight() {
-    const editor = document.getElementById("editor");
-    const highlight = document.getElementById("highlight");
+    const editor = document.getElementById("editor"); const highlight = document.getElementById("highlight");
     let html = editor.value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    if (document.body.classList.contains("zenburn-mode")) {
-        html = html.replace(/(\[.*?\])/g, '<span class="token-section">$1</span>').replace(/^([\w\s]+=)/gm, '<span class="token-key">$1</span>').replace(/(;.*$)/gm, '<span class="token-comment">$1</span>');
-    }
+    if (document.body.classList.contains("zenburn-mode")) { html = html.replace(/(\[.*?\])/g, '<span class="token-section">$1</span>').replace(/^([\w\s]+=)/gm, '<span class="token-key">$1</span>').replace(/(;.*$)/gm, '<span class="token-comment">$1</span>'); }
     highlight.innerHTML = html + (editor.value.endsWith('\n') ? ' ' : '');
 }
 function syncScroll() { document.getElementById("highlight").scrollTop = document.getElementById("editor").scrollTop; }
-function updateStats() {
-    const val = document.getElementById("editor").value;
-    document.getElementById("wCount").innerText = val.trim() ? val.trim().split(/\s+/).length : 0;
-    document.getElementById("cCount").innerText = val.length;
-}
+function updateStats() { const val = document.getElementById("editor").value; document.getElementById("wCount").innerText = val.trim() ? val.trim().split(/\s+/).length : 0; document.getElementById("cCount").innerText = val.length; }
 function changeFont() { document.getElementById("editor").style.fontFamily = document.getElementById("highlight").style.fontFamily = document.getElementById("fontFamily").value; }
 function changeSize() { document.getElementById("editor").style.fontSize = document.getElementById("highlight").style.fontSize = document.getElementById("fontSize").value + "px"; }
 function toggleBold() { const style = document.getElementById("editor").style.fontWeight === 'bold' ? 'normal' : 'bold'; document.getElementById("editor").style.fontWeight = document.getElementById("highlight").style.fontWeight = style; }
@@ -200,17 +445,14 @@ function undo() { document.execCommand('undo'); }
 function redo() { document.execCommand('redo'); }
 function setZenburn(on) { if(on) document.body.classList.add("zenburn-mode"); else document.body.classList.remove("zenburn-mode"); applyHighlight(); }
 function updateStyles() {
-    const hex = document.getElementById("bgColor").value;
-    const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    const hex = document.getElementById("bgColor").value; const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
     document.getElementById("container").style.backgroundColor = `rgba(${r},${g},${b}, ${document.getElementById("opacity").value})`;
     if (!document.body.classList.contains("zenburn-mode")) document.getElementById("highlight").style.color = document.getElementById("textColor").value;
 }
 async function translateText() {
     const dir = document.getElementById("transDir").value.split('|');
     const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${dir[0]}&tl=${dir[1]}&dt=t&q=${encodeURIComponent(document.getElementById("editor").value)}`);
-    const data = await res.json();
-    let t = ""; data[0].forEach(i => { if(i[0]) t += i[0]; });
-    document.getElementById("editor").value = t; handleInput();
+    const data = await res.json(); let t = ""; data[0].forEach(i => { if(i[0]) t += i[0]; }); document.getElementById("editor").value = t; handleInput();
 }
 function speakText(){ window.speechSynthesis.cancel(); const m=new SpeechSynthesisUtterance(document.getElementById("editor").value); m.lang='hu-HU'; window.speechSynthesis.speak(m); }
 function stopSpeak(){ window.speechSynthesis.cancel(); }
@@ -226,70 +468,289 @@ async function importFiles() {
             current = file.name;
         }
         saveData(); refresh(); alert("Kész!");
-    };
-    input.click();
+    }; input.click();
 }
 function saveIni() { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([document.getElementById("editor").value])); a.download = current+".ini"; a.click(); }
 function downloadTxt() { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([document.getElementById("editor").value])); a.download = current + ".txt"; a.click(); }
 function downloadPDF() { const doc = new jspdf.jsPDF(); doc.text(document.getElementById("editor").value, 10, 10); doc.save(current + ".pdf"); }
 function downloadAllZip() {
-    const customName = prompt("Név:");
-    const date = new Date().toISOString().slice(0, 10);
-    const zip = new JSZip();
+    const customName = prompt("Név:"); const date = new Date().toISOString().slice(0, 10); const zip = new JSZip();
     Object.keys(notes).forEach(n => zip.file(n + ".txt", notes[n]));
-    zip.generateAsync({type: "blob"}).then(c => {
-        const a = document.createElement("a");
-        a.download = `Mentés_${customName || ''}_${date}.zip`;
-        a.href = URL.createObjectURL(c); a.click();
-    });
+    zip.generateAsync({type: "blob"}).then(c => { const a = document.createElement("a"); a.download = `Mentés_${customName || ''}_${date}.zip`; a.href = URL.createObjectURL(c); a.click(); });
 }
 function exportJSON(){ const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(notes, null, 2)])); a.download = "mentes.json"; a.click(); }
-function searchText(){
-    let q=document.getElementById("search").value.toLowerCase(); if(!q) return;
-    let pos=document.getElementById("editor").value.toLowerCase().indexOf(q);
-    if(pos!==-1){document.getElementById("editor").focus(); document.getElementById("editor").setSelectionRange(pos,pos+q.length);}
-}
-
+function searchText(){ let q=document.getElementById("search").value.toLowerCase(); if(!q) return; let pos=document.getElementById("editor").value.toLowerCase().indexOf(q); if(pos!==-1){document.getElementById("editor").focus(); document.getElementById("editor").setSelectionRange(pos,pos+q.length);} }
 const htmlOverlay = document.getElementById('html-overlay');
 const htmlCode = document.getElementById('htmlCode');
 const leftPane = document.getElementById('leftPane');
 const dragBar = document.getElementById('dragBar');
 const htmlContainer = document.getElementById('htmlContainer');
 let isDragging = false;
-
-function openHtmlEditor() {
-    htmlOverlay.style.display = 'flex';
-    localStorage.setItem('htmlEditorOpen', 'true');
-    const saved = localStorage.getItem('savedHtmlCode');
-    if (saved) htmlCode.value = saved;
-    runCode();
-}
+function openHtmlEditor() { htmlOverlay.style.display = 'flex'; localStorage.setItem('htmlEditorOpen', 'true'); const saved = localStorage.getItem('savedHtmlCode'); if (saved) htmlCode.value = saved; runCode(); }
 function closeHtmlEditor() { htmlOverlay.style.display = 'none'; localStorage.setItem('htmlEditorOpen', 'false'); }
 function saveHtmlCode() { localStorage.setItem('savedHtmlCode', htmlCode.value); }
 function clearCode() { if (confirm("Törlés?")) { htmlCode.value = ""; saveHtmlCode(); runCode(); } }
-function runCode() {
-    const frame = document.getElementById('resultFrame').contentWindow.document;
-    frame.open(); frame.write(htmlCode.value); frame.close();
+function runCode() { const frame = document.getElementById('resultFrame').contentWindow.document; frame.open(); frame.write(htmlCode.value); frame.close(); }
+dragBar.addEventListener('mousedown', () => isDragging = true);
+document.addEventListener('mousemove', e => { if (!isDragging) return; let newWidth = Math.max(100, Math.min(e.clientX, htmlContainer.clientWidth - 100)); leftPane.style.width = newWidth + 'px'; });
+document.addEventListener('mouseup', () => isDragging = false);
+window.addEventListener('load', () => { if (localStorage.getItem('htmlEditorOpen') === 'true') openHtmlEditor(); });
+const fDrop = document.getElementById('fontFamily');
+rawFonts.forEach((f, i) => { let o = document.createElement('option'); o.value = f; o.textContent = (i + 1) + ". " + f; o.style.color = fontColors[i % fontColors.length]; o.style.fontFamily = f; fDrop.appendChild(o); });
+fDrop.value = "Arial"; updateStyles(); changeFont();
+
+// EREDETI OCR - 100% eredeti
+function cleanGtaText(text){
+ if(!text) return ''; let m = text.match(/Go to the [A-Za-z\s]+Highlands[^.]*\.?/i); if(m) return m[0].trim(); let m2 = text.match(/Go to [^\n]{5,100}/i); if(m2) return m2[0].trim(); let lines = text.split('\n'); let ok=[]; for(let l of lines){ l=l.trim(); if(l.length<8) continue; if(l.includes('rem WT')) continue; if(l.includes('[may')) continue; if(l.includes('|ERL')) continue; if(l.includes('== ii')) continue; if(l.includes('lig pe Ji')) continue; if(l.includes('©') && l.length<60) continue; if(l.includes('[') || l.includes(']')) continue; if(/[£§]/.test(l)) continue; let letters=(l.match(/[A-Za-z]/g)||[]).length; if(letters<4) continue; ok.push(l); } if(ok.length>0) return ok.slice(0,2).join(' ').substring(0,500); return '';
+}
+async function cropBottomCenterImage(file){
+ return new Promise((resolve)=>{ const img=new Image(); img.onload=()=>{ const canvas=document.createElement('canvas'); const ctx=canvas.getContext('2d'); const cropW=img.width*0.78; const cropH=img.height*0.28; const cropX=(img.width-cropW)/2; const cropY=img.height-cropH - img.height*0.04; canvas.width=cropW*3; canvas.height=cropH*3; ctx.drawImage(img, cropX, cropY, cropW, cropH, 0, 0, canvas.width, canvas.height); let d=ctx.getImageData(0,0,canvas.width,canvas.height); let a=d.data; for(let i=0;i<a.length;i+=4){ let g=0.299*a[i]+0.587*a[i+1]+0.114*a[i+2]; let v=g>125?255:0; a[i]=a[i+1]=a[i+2]=v; } ctx.putImageData(d,0,0); canvas.toBlob((b)=>{ resolve(b); }, 'image/png'); }; img.src=URL.createObjectURL(file); });
+}
+let lastTranslatedText = "";
+function openOcrModal() { document.getElementById('ocr-overlay').style.display = 'flex'; document.getElementById('ocr-status').innerText = 'Várakozás képre...'; document.getElementById('ocr-img-preview').style.display = 'none'; document.getElementById('result-box').style.display = 'none'; document.getElementById('btn-apply').style.display = 'none'; }
+function closeOcrModal() { document.getElementById('ocr-overlay').style.display = 'none'; }
+function openGtaModal() { document.getElementById('gta-overlay').style.display = 'flex'; }
+function closeGtaModal() { document.getElementById('gta-overlay').style.display = 'none'; }
+window.addEventListener('paste', e => { if (document.getElementById('ocr-overlay').style.display === 'flex') { const items = e.clipboardData?.items || []; for (let i = 0; i < items.length; i++) { if (items[i].type.indexOf('image') !== -1) { const blob = items[i].getAsFile(); if (blob) handleOcrFile(blob); break; } } } });
+async function handleOcrFile(file) {
+    if (!file) return;
+    const imgPreview = document.getElementById('ocr-img-preview'); const placeholder = document.getElementById('dropzone-placeholder'); const fileInfo = document.getElementById('ocr-file-info'); const filenameEl = document.getElementById('ocr-filename'); const percentEl = document.getElementById('ocr-percent');
+    imgPreview.src = URL.createObjectURL(file); imgPreview.style.display = 'block'; if(placeholder) placeholder.style.display='none'; if(fileInfo) fileInfo.style.display='flex'; if(filenameEl) filenameEl.innerText = file.name + ' • ' + (file.size/1024/1024).toFixed(1) + ' MB';
+    const status = document.getElementById('ocr-status'); const statusText = document.getElementById('ocr-status-text'); const originalEl = document.getElementById('ocr-original'); const translatedEl = document.getElementById('ocr-translated'); const resultBox = document.getElementById('result-box'); const bottomBlueBox = document.getElementById('bottom-blue-box'); const bottomBlueText = document.getElementById('bottom-blue-text');
+    if(status) status.style.display='flex'; resultBox.style.display = 'none'; if(bottomBlueBox) bottomBlueBox.style.display='none';
+    try {
+        const ret = await Tesseract.recognize(file, 'eng', { logger: m => { if (m.status === 'recognizing text' && status && statusText) { status.style.display='flex'; statusText.innerText = `Felismerés: ${Math.round((m.progress || 0) * 100)}%`; if(percentEl) percentEl.innerText = Math.round((m.progress || 0) * 100) + '% FELISMERME'; } } });
+        let rawText = ret.data.text.trim(); let extractedText = cleanGtaText(rawText);
+        if (!extractedText || extractedText.length < 5) { try { const bottomBlob = await cropBottomCenterImage(file); const retBottom = await Tesseract.recognize(bottomBlob, 'eng', { logger: m=>{} }); let bottomText = cleanGtaText(retBottom.data.text.trim()); if(!bottomText) bottomText = retBottom.data.text.trim(); if(bottomText && bottomText.length>5) extractedText = bottomText; } catch(e){} }
+        if (!extractedText || extractedText.length < 5) { if(status && statusText){ status.style.display='flex'; statusText.innerText = '❌ Nincs értelmes szöveg!'; } return; }
+        originalEl.innerText = extractedText; resultBox.style.display = 'flex';
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=hu&dt=t&q=${encodeURIComponent(extractedText)}`);
+        const data = await res.json(); let translatedText = ""; if (data && data[0]) data[0].forEach(i => { if(i[0]) translatedText += i[0]; });
+        if(extractedText.toLowerCase().includes('palomino highlands')) translatedText = 'Menj a Palomino-felföldre.'; else if(extractedText.toLowerCase().includes('holowan highlands')) translatedText = 'Menj a Holowan-felföldre.';
+        if (translatedText) { translatedEl.innerText = translatedText; lastTranslatedText = translatedText; if(status && statusText){ status.style.display='flex'; statusText.innerText = 'Kész! Sallang nélkül - SÁRGA + KÉK küldetés!'; } if(percentEl) percentEl.innerText = '100% FELISMERME'; document.getElementById('btn-apply').style.display = 'inline-flex'; }
+        try { const bottomBlob = await cropBottomCenterImage(file); const retBottom = await Tesseract.recognize(bottomBlob, 'eng', { logger: m=>{} }); let bottomText = cleanGtaText(retBottom.data.text.trim()); if(!bottomText) bottomText = retBottom.data.text.trim(); if(bottomText && bottomBlueBox && bottomBlueText){ const res2 = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=hu&dt=t&q=${encodeURIComponent(bottomText)}`); const data2 = await res2.json(); let transBottom=""; if(data2 && data2[0]) data2[0].forEach(i=>{ if(i[0]) transBottom+=i[0]; }); if(transBottom.toLowerCase().includes('palomino')) transBottom = 'Menj a Palomino-felföldre. (Küldetés)'; bottomBlueText.innerText = transBottom || bottomText; bottomBlueBox.style.display='block'; } } catch(e){}
+    } catch (err) { if(status && statusText){ status.style.display='flex'; statusText.innerText = '❌ Hiba: ' + err.message; } }
+}
+function applyTranslation() { if (lastTranslatedText) { document.getElementById("editor").value += "\n\n--- Fényképről fordítva (GTA 5%) ---\n" + lastTranslatedText + "\n"; handleInput(); closeOcrModal(); } }
+function downloadGtaBotScript() {
+    const pyCode = `import tkinter as tk\nfrom tkinter import ttk\nimport threading, time, os\nimport mss\nfrom PIL import Image, ImageOps, ImageTk\nimport pytesseract\nfrom deep_translator import GoogleTranslator\n`; const blob = new Blob([pyCode], { type: "text/plain" }); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "Gta5-Simple-Selector.py"; a.click();
 }
 
-dragBar.addEventListener('mousedown', () => isDragging = true);
-document.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    let newWidth = Math.max(100, Math.min(e.clientX, htmlContainer.clientWidth - 100));
-    leftPane.style.width = newWidth + 'px';
-});
-document.addEventListener('mouseup', () => isDragging = false);
+// === ÚJ 2 MENÜ - 1-es és 2-es FIX TESSERACT ===
+let lastAlsoText="", lastTeljesText="";
 
-window.addEventListener('load', () => { if (localStorage.getItem('htmlEditorOpen') === 'true') openHtmlEditor(); });
+function openAlsoKepModal(){ document.getElementById('also-kep-overlay').style.display='flex'; }
+function closeAlsoKepModal(){ document.getElementById('also-kep-overlay').style.display='none'; }
+function openTeljesKepModal(){ document.getElementById('teljes-kep-overlay').style.display='flex'; }
+function closeTeljesKepModal(){ document.getElementById('teljes-kep-overlay').style.display='none'; }
 
-const fDrop = document.getElementById('fontFamily');
-rawFonts.forEach((f, i) => {
-    let o = document.createElement('option'); o.value = f; o.textContent = (i + 1) + ". " + f;
-    o.style.color = fontColors[i % fontColors.length]; o.style.fontFamily = f; fDrop.appendChild(o);
-});
-fDrop.value = "Arial";
-updateStyles();
-changeFont();
+function cleanAlsoText(t){
+  if(!t) return '';
+  t=t.replace(/^(El|EI|E l)\s+/i,'').trim();
+  t=t.replace(/^[A-Z]{1,2}\s+/, '').trim();
+  let lines=t.split('\n').map(l=>l.trim()).filter(l=>l.length>5);
+  let ok=[];
+  for(let l of lines){
+    if(l.length<6) continue;
+    if(l.includes('rem WT')||l.includes('[may')||l.includes('|ERL')||l.includes('©')&&l.length<60) continue;
+    if(/^[\\~|]+$/.test(l)) continue;
+    if((l.match(/[A-Za-z]/g)||[]).length<4) continue;
+    ok.push(l);
+  }
+  return ok.length?ok.join(' ').substring(0,400):t.substring(0,400);
+}
+
+async function cropAlsoKepBottom30(file){
+ return new Promise((resolve,reject)=>{
+  const img=new Image();
+  img.onload=()=>{
+    const canvas=document.createElement('canvas'); const ctx=canvas.getContext('2d');
+    const gridW=img.width/3, gridH=img.height/2;
+    const cellX=gridW, cellY=gridH;
+    const subY=cellY + gridH*0.70, subH=gridH*0.30;
+    canvas.width=gridW*3; canvas.height=subH*3;
+    ctx.drawImage(img, cellX, subY, gridW, subH, 0, 0, canvas.width, canvas.height);
+    let d=ctx.getImageData(0,0,canvas.width,canvas.height); let a=d.data;
+    for(let i=0;i<a.length;i+=4){ let g=0.299*a[i]+0.587*a[i+1]+0.114*a[i+2]; let v=g>140?255:0; a[i]=a[i+1]=a[i+2]=v; }
+    ctx.putImageData(d,0,0);
+    canvas.toBlob(b=>resolve(b), 'image/png');
+  };
+  img.onerror=reject; img.src=URL.createObjectURL(file);
+ });
+}
+
+async function handleAlsoKepFile(file){
+  if(!file) return;
+  const preview=document.getElementById('also-kep-preview'); const ph=document.getElementById('also-drop-placeholder');
+  const finfo=document.getElementById('also-file-info'); const fname=document.getElementById('also-filename');
+  const percent=document.getElementById('also-kep-percent'); const wrap=document.getElementById('also-kep-status-wrap');
+  const st=document.getElementById('also-kep-status-text'); const orig=document.getElementById('also-kep-original');
+  const trans=document.getElementById('also-kep-translated'); const rbox=document.getElementById('also-result-box');
+  const btn=document.getElementById('also-btn-apply');
+  preview.src=URL.createObjectURL(file); preview.style.display='block'; if(ph) ph.style.display='none';
+  if(finfo) finfo.style.display='flex'; if(fname) fname.innerText=file.name+' • '+(file.size/1024/1024).toFixed(1)+' MB';
+  if(wrap) wrap.style.display='flex'; rbox.style.display='none'; btn.style.display='none';
+  try{
+    st.innerText='Tesseract worker indítása...'; if(percent) percent.innerText='5%';
+    const worker=await Tesseract.createWorker('eng',1,{ logger: m=>{ if(m.status==='recognizing text'){ const p=Math.round((m.progress||0)*100); if(percent) percent.innerText=p+'%'; st.innerText=`Szkennelés: ${p}%`; } else { st.innerText=m.status; } } });
+    const blob=await cropAlsoKepBottom30(file);
+    st.innerText='Felismerés...'; const {data:{text:raw}}=await worker.recognize(blob); await worker.terminate();
+    let cleaned=cleanAlsoText(raw);
+    if(!cleaned || cleaned.length<5) cleaned=raw.trim();
+    orig.innerText=cleaned; rbox.style.display='flex';
+    // fordítás
+    st.innerText='Fordítás...';
+    let hu="";
+    try{
+      const res=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleaned)}&langpair=en|hu`);
+      const j=await res.json(); hu=j.responseData?.translatedText||"";
+      if(!hu || hu.toLowerCase()===cleaned.toLowerCase()) throw 1;
+    }catch(e){
+      // fallback
+      if(/palomino highlands/i.test(cleaned)) hu="Menj a Palomino-felföldre.";
+      else if(/wreck site/i.test(cleaned)) hu="Menj a roncs helyszínére.";
+      else if(/weapon parts/i.test(cleaned)) hu="Szállítsd a fegyveralkatrészeket.";
+      else {
+        const r2=await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hu&dt=t&q=${encodeURIComponent(cleaned)}`);
+        const d2=await r2.json(); if(d2&&d2[0]) d2[0].forEach(i=>{if(i[0]) hu+=i[0];});
+      }
+    }
+    trans.innerText=hu||"(fordítás hiba)"; lastAlsoText=hu||cleaned;
+    if(percent) percent.innerText='100%'; st.innerText='Kész! ✓'; btn.style.display='inline-flex';
+  }catch(err){ st.innerText='❌ Hiba: '+err.message; console.error(err); }
+}
+function applyAlsoKep(){ if(lastAlsoText){ document.getElementById("editor").value+="\n\n--- Alsókép (1-es) ---\n"+lastAlsoText+"\n"; handleInput(); closeAlsoKepModal(); } }
+
+async function handleTeljesKepFile(file){
+  if(!file) return;
+  const preview=document.getElementById('teljes-kep-preview'); const ph=document.getElementById('teljes-drop-placeholder');
+  const finfo=document.getElementById('teljes-file-info'); const fname=document.getElementById('teljes-filename');
+  const percent=document.getElementById('teljes-kep-percent'); const wrap=document.getElementById('teljes-kep-status-wrap');
+  const st=document.getElementById('teljes-kep-status-text'); const orig=document.getElementById('teljes-kep-original');
+  const trans=document.getElementById('teljes-kep-translated'); const rbox=document.getElementById('teljes-result-box');
+  const btn=document.getElementById('teljes-btn-apply');
+  preview.src=URL.createObjectURL(file); preview.style.display='block'; if(ph) ph.style.display='none';
+  if(finfo) finfo.style.display='flex'; if(fname) fname.innerText=file.name+' • '+(file.size/1024/1024).toFixed(1)+' MB';
+  if(wrap) wrap.style.display='flex'; rbox.style.display='none'; btn.style.display='none';
+  try{
+    st.innerText='Tesseract worker indítása...'; if(percent) percent.innerText='5%';
+    const worker=await Tesseract.createWorker('eng',1,{ logger: m=>{ if(m.status==='recognizing text'){ const p=Math.round((m.progress||0)*100); if(percent) percent.innerText=p+'%'; st.innerText=`Teljes kép: ${p}%`; } else { st.innerText=m.status; } } });
+    // teljes kép előfeldolgozás
+    const blob=await new Promise((res,rej)=>{
+      const img=new Image(); img.onload=()=>{
+        const canvas=document.createElement('canvas'); const ctx=canvas.getContext('2d');
+        canvas.width=img.width*2; canvas.height=img.height*2;
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        let d=ctx.getImageData(0,0,canvas.width,canvas.height); let a=d.data;
+        for(let i=0;i<a.length;i+=4){ let g=0.299*a[i]+0.587*a[i+1]+0.114*a[i+2]; let v=g>125?255:0; a[i]=a[i+1]=a[i+2]=v; }
+        ctx.putImageData(d,0,0); canvas.toBlob(b=>res(b),'image/png');
+      }; img.onerror=rej; img.src=URL.createObjectURL(file);
+    });
+    const {data:{text:raw}}=await worker.recognize(blob); await worker.terminate();
+    let cleaned=cleanAlsoText(raw);
+    if(!cleaned) cleaned=raw.trim();
+    orig.innerText=cleaned; rbox.style.display='flex';
+    let hu="";
+    try{
+      const res=await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(cleaned)}&langpair=en|hu`);
+      const j=await res.json(); hu=j.responseData?.translatedText||"";
+      if(!hu || hu.toLowerCase()===cleaned.toLowerCase()) throw 1;
+    }catch(e){
+      if(/palomino highlands/i.test(cleaned)) hu="Menj a Palomino-felföldre.";
+      else if(/wreck site/i.test(cleaned)) hu="Menj a roncs helyszínére.";
+      else if(/weapon parts/i.test(cleaned)) hu="Szállítsd a fegyveralkatrészeket.";
+      else { const r2=await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hu&dt=t&q=${encodeURIComponent(cleaned)}`); const d2=await r2.json(); if(d2&&d2[0]) d2[0].forEach(i=>{if(i[0]) hu+=i[0];}); }
+    }
+    trans.innerText=hu||"(fordítás hiba)"; lastTeljesText=hu||cleaned;
+    if(percent) percent.innerText='100%'; st.innerText='Kész! ✓'; btn.style.display='inline-flex';
+  }catch(err){ st.innerText='❌ Hiba: '+err.message; console.error(err); }
+}
+function applyTeljesKep(){ if(lastTeljesText){ document.getElementById("editor").value+="\n\n--- Teljeskép (2-es) ---\n"+lastTeljesText+"\n"; handleInput(); closeTeljesKepModal(); } }
+
+// anti-translate force
+document.documentElement.lang='hu';
+
+// VÉGZETÚR 4 VÁLASZ - EGYSZERŰ MŰKÖDŐ
+const VDB = {
+"egyedul a felhők felett": "Antoine de Saint-Exupéry",
+"ejszakai repules": "Antoine de Saint-Exupéry",
+"kis herceg": "Antoine de Saint-Exupéry",
+"egri csillagok": "Gárdonyi Géza",
+"pal utcai fiuk": "Molnár Ferenc",
+"toldi": "Arany János",
+"janos vitez": "Petőfi Sándor",
+"legy jo mindhalalig": "Móricz Zsigmond",
+"ember tragediája": "Madách Imre",
+"koszivu ember fiai": "Jókai Mór",
+"arany ember": "Jókai Mór",
+"himnusz": "Kölcsey Ferenc",
+"szózat": "Vörösmarty Mihály",
+"bank ban": "Katona József"
+};
+function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim(); }
+function checkVegzetur(){
+    let q=document.getElementById('vq').value.trim();
+    let a1=document.getElementById('va1').value.trim();
+    let a2=document.getElementById('va2').value.trim();
+    let a3=document.getElementById('va3').value.trim();
+    let a4=document.getElementById('va4').value.trim();
+    let opts=[a1,a2,a3,a4].filter(x=>x);
+    if(!q || opts.length<2){ alert('Kérdés + legalább 2 válasz kell'); return; }
+    let nq=norm(q);
+    let found=null;
+    for(let k in VDB){ if(nq.includes(norm(k))){ found=VDB[k]; break; } }
+    let resDiv=document.getElementById('vres');
+    resDiv.style.display='block';
+    document.getElementById('vq_show').innerText=q;
+    let optsDiv=document.getElementById('vopts');
+    optsDiv.innerHTML='';
+    let correct=null;
+    if(found){
+        for(let o of opts){ if(norm(o).includes(norm(found).slice(0,6)) || norm(found).includes(norm(o).slice(0,6))){ correct=o; break; } }
+        if(!correct){
+            let best=0;
+            for(let o of opts){ let sc=0; norm(found).split(' ').forEach(w=>{ if(w.length>3 && norm(o).includes(w)) sc++; }); if(sc>best){ best=sc; correct=o; } }
+        }
+    }
+    document.getElementById('va_show').innerText = correct ? "✅ "+correct : (found ? found : "❓ Nincs DB-ben - tipp: "+opts[0]);
+    opts.forEach((o,i)=>{
+        let d=document.createElement('div');
+        let isC = o===correct;
+        d.style.cssText = isC ? 'background:#00ff00; color:#000; font-weight:bold; padding:8px; margin:4px 0; border-radius:6px;' : 'background:#222; color:#ddd; padding:8px; margin:4px 0; border-radius:6px; border:1px solid #444;';
+        d.innerText = String.fromCharCode(65+i)+") "+o + (isC ? " ✅" : "");
+        optsDiv.appendChild(d);
+    });
+}
+
 </script>
+
+<!-- VÉGZETÚR 4 VÁLASZ MODUL V.03 -->
+<div id="vegzetur-overlay" class="notranslate" translate="no" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:3300; justify-content:center; align-items:flex-start; overflow-y:auto; padding:20px;">
+    <div style="width:700px; background:#111; border:2px solid #ffcc00; border-radius:12px; padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:12px;">
+            <h3 style="color:#ffcc00; margin:0;">🟡 Végzetúr Kvíz - 4 válasz</h3>
+            <button onclick="document.getElementById('vegzetur-overlay').style.display='none'" style="background:#333; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">✕</button>
+        </div>
+        
+        <label style="color:#ffcc00; font-size:11px;">KÉRDÉS:</label>
+        <textarea id="vq" style="width:100%; height:60px; background:#000; color:#fff; border:1px solid #ffcc00; padding:8px; border-radius:6px; margin:4px 0 10px 0;"></textarea>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+            <div><label style="color:#888; font-size:11px;">A)</label><input id="va1" style="width:100%; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:6px;"></div>
+            <div><label style="color:#888; font-size:11px;">B)</label><input id="va2" style="width:100%; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:6px;"></div>
+            <div><label style="color:#888; font-size:11px;">C)</label><input id="va3" style="width:100%; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:6px;"></div>
+            <div><label style="color:#888; font-size:11px;">D)</label><input id="va4" style="width:100%; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:6px;"></div>
+        </div>
+        
+        <button onclick="checkVegzetur()" style="width:100%; background:#ffcc00; color:#000; font-weight:bold; padding:12px; border:none; border-radius:8px; cursor:pointer; font-size:14px;">🔍 KERESÉS A 4 KÖZÜL</button>
+        
+        <div id="vres" style="display:none; margin-top:14px; background:#1a1200; border:1px solid #ffcc00; border-radius:8px; padding:12px;">
+            <div id="vq_show" style="color:#fff; font-size:13px; margin-bottom:10px;"></div>
+            <div id="va_show" style="color:#00ff00; font-size:18px; font-weight:bold; margin-bottom:10px;"></div>
+            <div id="vopts"></div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
