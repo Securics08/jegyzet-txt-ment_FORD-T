@@ -5,169 +5,10 @@
 <meta name="google" content="notranslate">
 <meta name="googlebot" content="notranslate">
 <meta http-equiv="Content-Language" content="hu">
-<title>Végtelen Jegyzet PRO - Magyar - STABLE V.02</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-// VÉGZETÚR 4 VÁLASZ - EGYSZERŰ MŰKÖDŐ
-const VDB = {
-"egyedul a felhők felett": "Antoine de Saint-Exupéry",
-"ejszakai repules": "Antoine de Saint-Exupéry",
-"kis herceg": "Antoine de Saint-Exupéry",
-"egri csillagok": "Gárdonyi Géza",
-"pal utcai fiuk": "Molnár Ferenc",
-"toldi": "Arany János",
-"janos vitez": "Petőfi Sándor",
-"legy jo mindhalalig": "Móricz Zsigmond",
-"ember tragediája": "Madách Imre",
-"koszivu ember fiai": "Jókai Mór",
-"arany ember": "Jókai Mór",
-"himnusz": "Kölcsey Ferenc",
-"szózat": "Vörösmarty Mihály",
-"bank ban": "Katona József"
-};
-function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim(); }
-function checkVegzetur(){
-    let q=document.getElementById('vq').value.trim();
-    let a1=document.getElementById('va1').value.trim();
-    let a2=document.getElementById('va2').value.trim();
-    let a3=document.getElementById('va3').value.trim();
-    let a4=document.getElementById('va4').value.trim();
-    let opts=[a1,a2,a3,a4].filter(x=>x);
-    if(!q || opts.length<2){ alert('Kérdés + legalább 2 válasz kell'); return; }
-    let nq=norm(q);
-    let found=null;
-    for(let k in VDB){ if(nq.includes(norm(k))){ found=VDB[k]; break; } }
-    let resDiv=document.getElementById('vres');
-    resDiv.style.display='block';
-    document.getElementById('vq_show').innerText=q;
-    let optsDiv=document.getElementById('vopts');
-    optsDiv.innerHTML='';
-    let correct=null;
-    if(found){
-        for(let o of opts){ if(norm(o).includes(norm(found).slice(0,6)) || norm(found).includes(norm(o).slice(0,6))){ correct=o; break; } }
-        if(!correct){
-            let best=0;
-            for(let o of opts){ let sc=0; norm(found).split(' ').forEach(w=>{ if(w.length>3 && norm(o).includes(w)) sc++; }); if(sc>best){ best=sc; correct=o; } }
-        }
-    }
-    document.getElementById('va_show').innerText = correct ? "✅ "+correct : (found ? found : "❓ Nincs DB-ben - tipp: "+opts[0]);
-    opts.forEach((o,i)=>{
-        let d=document.createElement('div');
-        let isC = o===correct;
-        d.style.cssText = isC ? 'background:#00ff00; color:#000; font-weight:bold; padding:8px; margin:4px 0; border-radius:6px;' : 'background:#222; color:#ddd; padding:8px; margin:4px 0; border-radius:6px; border:1px solid #444;';
-        d.innerText = String.fromCharCode(65+i)+") "+o + (isC ? " ✅" : "");
-        optsDiv.appendChild(d);
-    });
-}
-
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js">
-// VÉGZETÚR 4 VÁLASZ - EGYSZERŰ MŰKÖDŐ
-const VDB = {
-"egyedul a felhők felett": "Antoine de Saint-Exupéry",
-"ejszakai repules": "Antoine de Saint-Exupéry",
-"kis herceg": "Antoine de Saint-Exupéry",
-"egri csillagok": "Gárdonyi Géza",
-"pal utcai fiuk": "Molnár Ferenc",
-"toldi": "Arany János",
-"janos vitez": "Petőfi Sándor",
-"legy jo mindhalalig": "Móricz Zsigmond",
-"ember tragediája": "Madách Imre",
-"koszivu ember fiai": "Jókai Mór",
-"arany ember": "Jókai Mór",
-"himnusz": "Kölcsey Ferenc",
-"szózat": "Vörösmarty Mihály",
-"bank ban": "Katona József"
-};
-function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim(); }
-function checkVegzetur(){
-    let q=document.getElementById('vq').value.trim();
-    let a1=document.getElementById('va1').value.trim();
-    let a2=document.getElementById('va2').value.trim();
-    let a3=document.getElementById('va3').value.trim();
-    let a4=document.getElementById('va4').value.trim();
-    let opts=[a1,a2,a3,a4].filter(x=>x);
-    if(!q || opts.length<2){ alert('Kérdés + legalább 2 válasz kell'); return; }
-    let nq=norm(q);
-    let found=null;
-    for(let k in VDB){ if(nq.includes(norm(k))){ found=VDB[k]; break; } }
-    let resDiv=document.getElementById('vres');
-    resDiv.style.display='block';
-    document.getElementById('vq_show').innerText=q;
-    let optsDiv=document.getElementById('vopts');
-    optsDiv.innerHTML='';
-    let correct=null;
-    if(found){
-        for(let o of opts){ if(norm(o).includes(norm(found).slice(0,6)) || norm(found).includes(norm(o).slice(0,6))){ correct=o; break; } }
-        if(!correct){
-            let best=0;
-            for(let o of opts){ let sc=0; norm(found).split(' ').forEach(w=>{ if(w.length>3 && norm(o).includes(w)) sc++; }); if(sc>best){ best=sc; correct=o; } }
-        }
-    }
-    document.getElementById('va_show').innerText = correct ? "✅ "+correct : (found ? found : "❓ Nincs DB-ben - tipp: "+opts[0]);
-    opts.forEach((o,i)=>{
-        let d=document.createElement('div');
-        let isC = o===correct;
-        d.style.cssText = isC ? 'background:#00ff00; color:#000; font-weight:bold; padding:8px; margin:4px 0; border-radius:6px;' : 'background:#222; color:#ddd; padding:8px; margin:4px 0; border-radius:6px; border:1px solid #444;';
-        d.innerText = String.fromCharCode(65+i)+") "+o + (isC ? " ✅" : "");
-        optsDiv.appendChild(d);
-    });
-}
-
-</script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js">
-// VÉGZETÚR 4 VÁLASZ - EGYSZERŰ MŰKÖDŐ
-const VDB = {
-"egyedul a felhők felett": "Antoine de Saint-Exupéry",
-"ejszakai repules": "Antoine de Saint-Exupéry",
-"kis herceg": "Antoine de Saint-Exupéry",
-"egri csillagok": "Gárdonyi Géza",
-"pal utcai fiuk": "Molnár Ferenc",
-"toldi": "Arany János",
-"janos vitez": "Petőfi Sándor",
-"legy jo mindhalalig": "Móricz Zsigmond",
-"ember tragediája": "Madách Imre",
-"koszivu ember fiai": "Jókai Mór",
-"arany ember": "Jókai Mór",
-"himnusz": "Kölcsey Ferenc",
-"szózat": "Vörösmarty Mihály",
-"bank ban": "Katona József"
-};
-function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim(); }
-function checkVegzetur(){
-    let q=document.getElementById('vq').value.trim();
-    let a1=document.getElementById('va1').value.trim();
-    let a2=document.getElementById('va2').value.trim();
-    let a3=document.getElementById('va3').value.trim();
-    let a4=document.getElementById('va4').value.trim();
-    let opts=[a1,a2,a3,a4].filter(x=>x);
-    if(!q || opts.length<2){ alert('Kérdés + legalább 2 válasz kell'); return; }
-    let nq=norm(q);
-    let found=null;
-    for(let k in VDB){ if(nq.includes(norm(k))){ found=VDB[k]; break; } }
-    let resDiv=document.getElementById('vres');
-    resDiv.style.display='block';
-    document.getElementById('vq_show').innerText=q;
-    let optsDiv=document.getElementById('vopts');
-    optsDiv.innerHTML='';
-    let correct=null;
-    if(found){
-        for(let o of opts){ if(norm(o).includes(norm(found).slice(0,6)) || norm(found).includes(norm(o).slice(0,6))){ correct=o; break; } }
-        if(!correct){
-            let best=0;
-            for(let o of opts){ let sc=0; norm(found).split(' ').forEach(w=>{ if(w.length>3 && norm(o).includes(w)) sc++; }); if(sc>best){ best=sc; correct=o; } }
-        }
-    }
-    document.getElementById('va_show').innerText = correct ? "✅ "+correct : (found ? found : "❓ Nincs DB-ben - tipp: "+opts[0]);
-    opts.forEach((o,i)=>{
-        let d=document.createElement('div');
-        let isC = o===correct;
-        d.style.cssText = isC ? 'background:#00ff00; color:#000; font-weight:bold; padding:8px; margin:4px 0; border-radius:6px;' : 'background:#222; color:#ddd; padding:8px; margin:4px 0; border-radius:6px; border:1px solid #444;';
-        d.innerText = String.fromCharCode(65+i)+") "+o + (isC ? " ✅" : "");
-        optsDiv.appendChild(d);
-    });
-}
-
-</script>
+<title>Végtelen Jegyzet PRO - Magyar - STABLE V.02 - NO VEGZETUR</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Abel&family=Abril+Fatface&family=Acme&family=Alegreya&family=Alex+Brush&family=Alfa+Slab+One&family=Alice&family=Alumni+Sans+Inline+One&family=Amatic+SC&family=Amita&family=Antic+Didone&family=Anton&family=Architects+Daughter&family=Archivo+Black&family=Are+You+Serious&family=Arima+Madurai&family=Arvo&family=Asap&family=Asset&family=Atomic+Age&family=Audiowide&family=Bangers&family=Barlow+Condensed&family=Bebas+Neue&family=Berkshire+Swash&family=Bevan&family=Bigelow+Rules&family=Black+Ops+One&family=Bonbon&family=Boogaloo&family=Bowlby+One+SC&family=Bungee+Shade&family=Butcherman&family=Cabin+Sketch&family=Caesar+Dressing&family=Carter+One&family=Caveat&family=Cinzel+Decorative&family=Codystar&family=Comfortaa&family=Coming+Soon&family=Concert+One&family=Cookie&family=Courgette&family=Creepster&family=Dancing+Script&family=Diplomata+SC&family=Domine&family=Eater&family=EB+Garamond&family=Emblema+One&family=Ewert&family=Fascinate+Inline&family=Faster+One&family=Finger+Paint&family=Flavors&family=Fontdiner+Swanky&family=Fredericka+the+Great&family=Frijole&family=Fugaz+One&family=Glass+Antiqua&family=Gloria+Hallelujah&family=Gochi+Hand&family=Great+Vibes&family=Grenze+Gotisch&family=Griffy&family=Handlee&family=Henny+Penny&family=Iceberg&family=Indie+Flower&family=Irish+Grover&family=Italianno&family=Jolly+Lodger&family=Kaushan+Script&family=Kelly+Slab&family=Kranky&family=Kumar+One&family=Lobster&family=Londrina+Shadow&family=Luckiest+Guy&family=Macondo&family=MedievalSharp&family=Megrim&family=Metal+Mania&family=Modak&family=Monoton&family=Mountains+of+Christmas&family=Mystery+Quest&family=Nabla&family=Nosifer&family=Nothing+You+Could+Do&family=Orbitron&family=Pacifico&family=Parisienne&family=Permanent+Marker&family=Pinyon+Script&family=Playfair+Display&family=Press+Start+2P&family=Righteous&family=Rubik+Glitch&family=Sacramento&family=Satisfy&family=Shadows+Into+Light&family=Silkscreen&family=Special+Elite&family=Syncopate&family=Ultra&family=UnifrakturMaguntia&family=VT323&family=Wallpoet&family=Zeyada&family=Montserrat&family=Nunito&family=Oswald&family=Spectral&family=Varela+Round&family=Roboto+Serif&family=Roboto+Mono&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0c0c0c;--panel:#141414;--text:#ddd;--border:#333;--accent:#00ff00;--val-color:#00ffff;}
@@ -200,10 +41,10 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
 #htmlCode { width:100%; height:100%; border:none; padding:15px; font-family:monospace; font-size:15px; resize:none; outline:none; }
 #resultFrame { width:100%; height:100%; border:none; background:white; }
 .close-html { background:#ff5555; color:white; border:none; padding:5px 15px; cursor:pointer; font-weight:bold; }
-/* PONTOSAN IGY NEZZEN KI - KEP ALAPJAN - V02 MAGENTA */
-#ocr-overlay, #gta-overlay, #also-kep-overlay, #teljes-kep-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.96); z-index:3000; justify-content:center; align-items:flex-start; overflow-y:auto; padding:10px 0; }
+#ocr-overlay, #gta-overlay, #also-kep-overlay, #teljes-kep-overlay, #tiszta-kep-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.96); z-index:3000; justify-content:center; align-items:flex-start; overflow-y:auto; padding:10px 0; }
 #also-kep-overlay{ z-index:3100; }
 #teljes-kep-overlay{ z-index:3200; }
+#tiszta-kep-overlay{ z-index:3400; }
 .modal-box { background:#0c0c0c; border:2px solid #00ff00; border-radius:12px; width:680px; max-width:96%; color:#ddd; box-shadow:0 0 25px rgba(0,255,0,0.5), inset 0 0 20px rgba(0,255,0,0.05); max-height:96vh; overflow-y:auto; display:flex; flex-direction:column; }
 .modal-header { display:flex; justify-content:space-between; align-items:center; padding:12px 16px; border-bottom:1px solid #1a1a1a; background:#0a0a0a; border-radius:12px 12px 0 0; }
 .modal-header h3 { margin:0; color:#00ff00; font-size:16px; font-weight:bold; letter-spacing:0.5px; text-transform:uppercase; }
@@ -231,12 +72,33 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
 .btn-close { background:#2a2a2a; color:#aaa; border:1px solid #333; padding:8px 16px; border-radius:6px; cursor:pointer; font-size:13px; }
 .btn-apply { background:#00cc00; color:white; font-weight:bold; border:none; padding:8px 18px; border-radius:6px; cursor:pointer; font-size:13px; text-transform:uppercase; box-shadow:0 0 10px rgba(0,255,0,0.3); }
 .gta-percent-btn { background:linear-gradient(135deg,#ffcc00,#ff8800) !important; color:#000 !important; font-weight:bold !important; border:2px solid #ffcc00 !important; }
-/* 1-es lime zöld neon */
 .hu-neon-box-lime { background: radial-gradient(ellipse at center, #002266 0%, #001133 100%) !important; border: 2px solid #0088ff !important; box-shadow: 0 0 15px rgba(0,136,255,0.8), 0 0 30px rgba(0,136,255,0.4), inset 0 0 20px rgba(0,100,255,0.2) !important; }
 .hu-neon-text-lime { color: #84ff00 !important; font-size: 20px !important; font-weight: 600 !important; text-shadow:none; }
-/* 2-es magenta */
 .hu-neon-box-magenta { background: radial-gradient(ellipse at center, #002266 0%, #001133 100%) !important; border: 2px solid #0088ff !important; box-shadow: 0 0 15px rgba(0,136,255,0.8), 0 0 30px rgba(0,136,255,0.4), inset 0 0 20px rgba(0,100,255,0.2) !important; }
 .hu-neon-text-magenta { color: #ff00ff !important; font-size: 20px !important; font-weight: 600 !important; text-shadow:none; }
+/* TISZTÍTOTT KÉPFORDÍTÓ - NEON ZÖLD - NAGY BETŰ, VÉKONY */
+#tiszta-kep-overlay .modal-box { border-color:#00ff88; box-shadow:0 0 30px rgba(0,255,136,0.6); width:900px; }
+.tiszta-image-container { position: relative; display: inline-block; max-width: 100%; border-radius: 8px; overflow: hidden; border:2px solid #00ff88; }
+#tiszta-main-img { display: block; max-width: 100%; height: auto; }
+#tiszta-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.lens-box {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.80);
+  color: #00ff88;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 500;
+  border-radius: 6px;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  line-height: 1.25;
+  border: 1px solid #00ff88;
+  text-shadow: 0 1px 2px #000;
+  box-shadow: 0 0 10px rgba(0,255,136,0.4);
+  letter-spacing: 0.2px;
+}
 </style>
 </head>
 <body class="zenburn-mode notranslate" translate="no">
@@ -250,11 +112,9 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
         <button onclick="openHtmlEditor()" class="color-cyan">🛠 HTML Szerkesztő</button> 
         <button onclick="insertTimestamp()" class="color-red">📅 Dátum</button>
         <button onclick="openGtaModal()" class="gta-percent-btn">🎮 GTA 5% MENÜ - FOTO FORDITO</button>
-        <button onclick="document.getElementById('vegzetur-overlay').style.display='flex'" style="color:#ffcc00; border:2px solid #ffcc00;">🟡 Végzetúr Kvíz</button>
-        <button onclick="openAlsoKepModal()" style="color:#00ff00; border:2px solid #00ff00;">🟡 Végzetúr Kvíz</button>
-        <button onclick="document.getElementById('vegzetur-overlay').style.display='flex'" style="color:#ffcc00; border:2px solid #ffcc00;">🟡 Végzetúr Kvíz</button>
         <button onclick="openAlsoKepModal()" style="color:#00ff00; border:2px solid #00ff00;">🟩 Alsókép</button>
         <button onclick="openTeljesKepModal()" style="color:#ff00ff; border:2px solid #ff00ff;">🟪 Teljeskép</button>
+        <button onclick="openTisztaKepModal()" style="background:linear-gradient(135deg,#00cc66,#00ff88); color:#000; font-weight:bold; border:2px solid #00ff88; box-shadow:0 0 15px rgba(0,255,136,0.7);">🟢 Tisztított Képfordító</button>
     </div>
     <div class="group">
         <select id="fontFamily" onchange="changeFont()"></select> 
@@ -350,9 +210,7 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
 <!-- 1-es ALSÓKÉP MODAL -->
 <div id="also-kep-overlay" class="notranslate" translate="no">
     <div class="modal-box" style="border-color:#00ff00; box-shadow:0 0 25px rgba(0,255,0,0.5);">
-        <div class="modal-header" style="border-bottom:1px solid #00ff0040;"><h3 style="color:#00ff00;">🟡 Végzetúr Kvíz</button>
-        <button onclick="document.getElementById('vegzetur-overlay').style.display='flex'" style="color:#ffcc00; border:2px solid #ffcc00;">🟡 Végzetúr Kvíz</button>
-        <button onclick="openAlsoKepModal()" style="color:#00ff00; border:2px solid #00ff00;">🟩 Alsókép - Alsó középső kocka + Lime zöld (1-es)</h3><button onclick="closeAlsoKepModal()" class="modal-close">✕</button></div>
+        <div class="modal-header" style="border-bottom:1px solid #00ff0040;"><h3 style="color:#00ff00;">🟩 Alsókép - Alsó középső kocka + Lime zöld (1-es)</h3><button onclick="closeAlsoKepModal()" class="modal-close">✕</button></div>
         <div class="dashed-container" style="border-color:#00ff0040;">
             <div class="ocr-dropzone" onclick="document.getElementById('also-kep-file').click()">
                 <div id="also-drop-placeholder" style="color:#555;"><div style="font-size:32px;">🟩</div><div style="font-size:13px; margin-top:8px;">Kattints vagy húzd ide a képet - ALSÓ KÖZÉPSŐ kocka</div><div style="font-size:11px; margin-top:4px; color:#00ff00;">6 részre osztva, csak 5-ös kocka alsó 30%</div></div>
@@ -388,6 +246,27 @@ button,select,input{background:#000;color:var(--text);border:1px solid var(--bor
             <div class="hungarian-box hu-neon-box-magenta"><strong style="color:#0088ff;">MAGYAR FORDÍTÁS (MAGENTA 20px):</strong><span id="teljes-kep-translated" class="hu-neon-text-magenta"></span></div>
         </div>
         <div class="modal-footer"><button onclick="closeTeljesKepModal()" class="btn-close">Bezárás</button><button onclick="applyTeljesKep()" class="btn-apply" id="teljes-btn-apply" style="display:none; background:#ff00ff;">BESZÚRÁS JEGYZETBE</button></div>
+    </div>
+</div>
+
+<!-- TISZTÍTOTT KÉPFORDÍTÓ - NEON ZÖLD - NAGY BETŰ, VÉKONY (UTOLSÓ VÁLTOZAT) -->
+<div id="tiszta-kep-overlay" class="notranslate" translate="no">
+    <div class="modal-box">
+        <div class="modal-header" style="border-bottom:1px solid #00ff8840;"><h3 style="color:#00ff88; text-shadow:0 0 10px rgba(0,255,136,0.8);">🟢 Tisztított Képfordító - Lens Nézet - NAGY VÉKONY</h3><button onclick="closeTisztaKepModal()" class="modal-close">✕</button></div>
+        <div style="padding:12px;">
+            <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+                <label for="tiszta-imageInput" style="background:linear-gradient(135deg,#00cc66,#00ff88); color:#000; font-weight:bold; padding:10px 18px; border-radius:6px; cursor:pointer; border:2px solid #00ff88; box-shadow:0 0 12px rgba(0,255,136,0.5);">📁 Kép választás</label>
+                <input type="file" id="tiszta-imageInput" accept="image/*" style="display:none;" onchange="processTisztaImage(this.files[0])">
+                <span id="tiszta-status" style="color:#00ff88; font-weight:bold; font-size:13px;">Válassz ki egy képet!</span>
+                <button onclick="downloadTisztaResult()" style="margin-left:auto; background:#111; color:#00ff88; border:1px solid #00ff88;">💾 Jegyzetbe</button>
+            </div>
+            <div class="tiszta-image-container" id="tiszta-container" style="display:none; width:100%;">
+                <img id="tiszta-main-img" alt="Feltöltött kép">
+                <div id="tiszta-overlay"></div>
+            </div>
+            <div id="tiszta-text-list" style="margin-top:12px; max-height:200px; overflow-y:auto; background:#080808; border:1px solid #222; border-radius:6px; padding:8px; font-size:12px;"></div>
+        </div>
+        <div class="modal-footer"><button onclick="closeTisztaKepModal()" class="btn-close">Bezárás</button></div>
     </div>
 </div>
 
@@ -598,7 +477,6 @@ async function handleAlsoKepFile(file){
     let cleaned=cleanAlsoText(raw);
     if(!cleaned || cleaned.length<5) cleaned=raw.trim();
     orig.innerText=cleaned; rbox.style.display='flex';
-    // fordítás
     st.innerText='Fordítás...';
     let hu="";
     try{
@@ -606,7 +484,6 @@ async function handleAlsoKepFile(file){
       const j=await res.json(); hu=j.responseData?.translatedText||"";
       if(!hu || hu.toLowerCase()===cleaned.toLowerCase()) throw 1;
     }catch(e){
-      // fallback
       if(/palomino highlands/i.test(cleaned)) hu="Menj a Palomino-felföldre.";
       else if(/wreck site/i.test(cleaned)) hu="Menj a roncs helyszínére.";
       else if(/weapon parts/i.test(cleaned)) hu="Szállítsd a fegyveralkatrészeket.";
@@ -635,7 +512,6 @@ async function handleTeljesKepFile(file){
   try{
     st.innerText='Tesseract worker indítása...'; if(percent) percent.innerText='5%';
     const worker=await Tesseract.createWorker('eng',1,{ logger: m=>{ if(m.status==='recognizing text'){ const p=Math.round((m.progress||0)*100); if(percent) percent.innerText=p+'%'; st.innerText=`Teljes kép: ${p}%`; } else { st.innerText=m.status; } } });
-    // teljes kép előfeldolgozás
     const blob=await new Promise((res,rej)=>{
       const img=new Image(); img.onload=()=>{
         const canvas=document.createElement('canvas'); const ctx=canvas.getContext('2d');
@@ -667,90 +543,105 @@ async function handleTeljesKepFile(file){
 }
 function applyTeljesKep(){ if(lastTeljesText){ document.getElementById("editor").value+="\n\n--- Teljeskép (2-es) ---\n"+lastTeljesText+"\n"; handleInput(); closeTeljesKepModal(); } }
 
-// anti-translate force
-document.documentElement.lang='hu';
-
-// VÉGZETÚR 4 VÁLASZ - EGYSZERŰ MŰKÖDŐ
-const VDB = {
-"egyedul a felhők felett": "Antoine de Saint-Exupéry",
-"ejszakai repules": "Antoine de Saint-Exupéry",
-"kis herceg": "Antoine de Saint-Exupéry",
-"egri csillagok": "Gárdonyi Géza",
-"pal utcai fiuk": "Molnár Ferenc",
-"toldi": "Arany János",
-"janos vitez": "Petőfi Sándor",
-"legy jo mindhalalig": "Móricz Zsigmond",
-"ember tragediája": "Madách Imre",
-"koszivu ember fiai": "Jókai Mór",
-"arany ember": "Jókai Mór",
-"himnusz": "Kölcsey Ferenc",
-"szózat": "Vörösmarty Mihály",
-"bank ban": "Katona József"
-};
-function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/ +/g,' ').trim(); }
-function checkVegzetur(){
-    let q=document.getElementById('vq').value.trim();
-    let a1=document.getElementById('va1').value.trim();
-    let a2=document.getElementById('va2').value.trim();
-    let a3=document.getElementById('va3').value.trim();
-    let a4=document.getElementById('va4').value.trim();
-    let opts=[a1,a2,a3,a4].filter(x=>x);
-    if(!q || opts.length<2){ alert('Kérdés + legalább 2 válasz kell'); return; }
-    let nq=norm(q);
-    let found=null;
-    for(let k in VDB){ if(nq.includes(norm(k))){ found=VDB[k]; break; } }
-    let resDiv=document.getElementById('vres');
-    resDiv.style.display='block';
-    document.getElementById('vq_show').innerText=q;
-    let optsDiv=document.getElementById('vopts');
-    optsDiv.innerHTML='';
-    let correct=null;
-    if(found){
-        for(let o of opts){ if(norm(o).includes(norm(found).slice(0,6)) || norm(found).includes(norm(o).slice(0,6))){ correct=o; break; } }
-        if(!correct){
-            let best=0;
-            for(let o of opts){ let sc=0; norm(found).split(' ').forEach(w=>{ if(w.length>3 && norm(o).includes(w)) sc++; }); if(sc>best){ best=sc; correct=o; } }
-        }
-    }
-    document.getElementById('va_show').innerText = correct ? "✅ "+correct : (found ? found : "❓ Nincs DB-ben - tipp: "+opts[0]);
-    opts.forEach((o,i)=>{
-        let d=document.createElement('div');
-        let isC = o===correct;
-        d.style.cssText = isC ? 'background:#00ff00; color:#000; font-weight:bold; padding:8px; margin:4px 0; border-radius:6px;' : 'background:#222; color:#ddd; padding:8px; margin:4px 0; border-radius:6px; border:1px solid #444;';
-        d.innerText = String.fromCharCode(65+i)+") "+o + (isC ? " ✅" : "");
-        optsDiv.appendChild(d);
+// === TISZTÍTOTT KÉPFORDÍTÓ - NAGY BETŰ, VÉKONY - UTOLSÓ VÁLTOZAT ===
+function openTisztaKepModal(){ document.getElementById('tiszta-kep-overlay').style.display='flex'; }
+function closeTisztaKepModal(){ document.getElementById('tiszta-kep-overlay').style.display='none'; }
+let tisztaLastResults = [];
+async function translateTiszta(text){
+  try{
+    let res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=hu&dt=t&q=${encodeURIComponent(text)}`);
+    let data = await res.json();
+    let hu=''; if(data && data[0]) data[0].forEach(i=>{ if(i[0]) hu+=i[0]; });
+    if(hu) return hu;
+  }catch(e){}
+  try{
+    let res2 = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|hu`);
+    let data2 = await res2.json();
+    return data2.responseData?.translatedText || text;
+  }catch(e){ return text; }
+}
+async function processTisztaImage(file){
+  if(!file) return;
+  const status = document.getElementById('tiszta-status');
+  const img = document.getElementById('tiszta-main-img');
+  const overlay = document.getElementById('tiszta-overlay');
+  const container = document.getElementById('tiszta-container');
+  const list = document.getElementById('tiszta-text-list');
+  overlay.innerHTML=''; list.innerHTML=''; tisztaLastResults=[];
+  status.innerText='Előfeldolgozás...';
+  // előfeldolgozás 2x nagyítás
+  let blob;
+  try{
+    blob = await new Promise((res,rej)=>{
+      const im=new Image(); im.onload=()=>{
+        const c=document.createElement('canvas'); const cx=c.getContext('2d');
+        c.width=im.width*2; c.height=im.height*2;
+        cx.fillStyle='#fff'; cx.fillRect(0,0,c.width,c.height);
+        cx.drawImage(im,0,0,c.width,c.height);
+        let d=cx.getImageData(0,0,c.width,c.height); let a=d.data;
+        for(let i=0;i<a.length;i+=4){ let g=0.299*a[i]+0.587*a[i+1]+0.114*a[i+2]; g=(g-128)*1.4+128+15; if(g>200) g=255; else if(g<45) g=0; a[i]=a[i+1]=a[i+2]=g; }
+        cx.putImageData(d,0,0);
+        c.toBlob(b=>res(b),'image/png');
+      }; im.onerror=rej; im.src=URL.createObjectURL(file);
     });
+  }catch(e){ blob=file; }
+  img.src = URL.createObjectURL(file);
+  await new Promise(r=>{ img.onload=r; });
+  container.style.display='inline-block';
+  status.innerText='OCR - soronként...';
+  let worker;
+  try{ worker = await Tesseract.createWorker('eng'); await worker.setParameters({ tessedit_pageseg_mode: '6' }); }catch(e){ status.innerText='❌ Tesseract hiba'; return; }
+  let ret;
+  try{ ret = await worker.recognize(blob); }catch(e){ try{ ret = await worker.recognize(img.src); }catch(e2){ status.innerText='❌ Felismerés hiba'; await worker.terminate(); return; } }
+  await worker.terminate();
+  status.innerText='Fordítás...';
+  const scaleX = img.clientWidth / img.naturalWidth;
+  const scaleY = img.clientHeight / img.naturalHeight;
+  let count=0;
+  let lines = ret.data.lines || [];
+  for(let line of lines){
+    let raw = line.text||'';
+    let cleaned = raw.replace(/[^a-zA-Z0-9\s.,!?'"\-]/g,' ').replace(/\s+/g,' ').trim();
+    cleaned = cleaned.replace(/kbusters/gi,'blockbusters');
+    if(!cleaned) continue;
+    if(cleaned.length<4) continue;
+    let letters=(cleaned.match(/[A-Za-z]/g)||[]).length;
+    if(letters < cleaned.length*0.6) continue;
+    if(!/[A-Za-z]{3,}/.test(cleaned)) continue;
+    const BAD=['GhEFG','aUGE','ly 9','0 4 0','AR Za','BAl','POT Vagy','XN J 3','i SEN','bi bi'];
+    if(BAD.some(b=> cleaned.includes(b))) continue;
+    if(cleaned.length<8 && !/^(Sign In|Sign Up|Verify|Join over|Or sign in)/i.test(cleaned)) continue;
+    let hu = await translateTiszta(cleaned);
+    if(!hu) continue;
+    tisztaLastResults.push({en:cleaned, hu:hu, bbox:line.bbox});
+    let b=line.bbox;
+    let x=b.x0/2 - 6, y=b.y0/2 - 6, w=(b.x1-b.x0)/2 + 12, h=(b.y1-b.y0)/2 + 12;
+    if(x<0 || w>canvas.width) { x=b.x0*scaleX; y=b.y0*scaleY; w=(b.x1-b.x0)*scaleX; h=(b.y1-b.y0)*scaleY; }
+    let div=document.createElement('div');
+    div.className='lens-box';
+    div.style.left=x+'px'; div.style.top=y+'px'; div.style.width=w+'px'; div.style.minHeight=h+'px';
+    div.style.fontSize=Math.max(18, Math.min(h*0.75, 26))+'px';
+    div.style.fontWeight='500';
+    div.innerText=hu;
+    overlay.appendChild(div);
+    let item=document.createElement('div'); item.style.padding='6px'; item.style.borderBottom='1px solid #222';
+    item.innerHTML=`<span style="color:#888; font-size:12px;">${cleaned}</span><br><span style="color:#00ff88; font-weight:500; font-size:20px;">→ ${hu}</span>`;
+    list.appendChild(item);
+    count++;
+  }
+  status.innerText=`KÉSZ! ${count} tiszta sor fordítva ✓ - nagy vékony`;
+  if(count===0){ list.innerHTML='<div style="color:#ff5555;">Nem találtam tiszta sort. Próbáld meg kivágni a szöveget.</div>'; }
+}
+function downloadTisztaResult(){
+  if(!tisztaLastResults.length){ alert('Nincs fordítás még'); return; }
+  let txt = tisztaLastResults.map(r=>`${r.en}\n→ ${r.hu}`).join('\n\n');
+  document.getElementById('editor').value += `\n\n--- Tisztított Képfordító (Lens) ---\n${txt}\n`;
+  handleInput();
+  closeTisztaKepModal();
 }
 
+document.documentElement.lang='hu';
 </script>
-
-<!-- VÉGZETÚR 4 VÁLASZ MODUL V.03 -->
-<div id="vegzetur-overlay" class="notranslate" translate="no" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:3300; justify-content:center; align-items:flex-start; overflow-y:auto; padding:20px;">
-    <div style="width:700px; background:#111; border:2px solid #ffcc00; border-radius:12px; padding:16px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:12px;">
-            <h3 style="color:#ffcc00; margin:0;">🟡 Végzetúr Kvíz - 4 válasz</h3>
-            <button onclick="document.getElementById('vegzetur-overlay').style.display='none'" style="background:#333; color:#fff; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">✕</button>
-        </div>
-        
-        <label style="color:#ffcc00; font-size:11px;">KÉRDÉS:</label>
-        <textarea id="vq" style="width:100%; height:60px; background:#000; color:#fff; border:1px solid #ffcc00; padding:8px; border-radius:6px; margin:4px 0 10px 0;"></textarea>
-        
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
-            <div><label style="color:#888; font-size:11px;">A)</label><input id="va1" style="width:100%; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:6px;"></div>
-            <div><label style="color:#888; font-size:11px;">B)</label><input id="va2" style="width:100%; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:6px;"></div>
-            <div><label style="color:#888; font-size:11px;">C)</label><input id="va3" style="width:100%; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:6px;"></div>
-            <div><label style="color:#888; font-size:11px;">D)</label><input id="va4" style="width:100%; background:#000; color:#fff; border:1px solid #444; padding:8px; border-radius:6px;"></div>
-        </div>
-        
-        <button onclick="checkVegzetur()" style="width:100%; background:#ffcc00; color:#000; font-weight:bold; padding:12px; border:none; border-radius:8px; cursor:pointer; font-size:14px;">🔍 KERESÉS A 4 KÖZÜL</button>
-        
-        <div id="vres" style="display:none; margin-top:14px; background:#1a1200; border:1px solid #ffcc00; border-radius:8px; padding:12px;">
-            <div id="vq_show" style="color:#fff; font-size:13px; margin-bottom:10px;"></div>
-            <div id="va_show" style="color:#00ff00; font-size:18px; font-weight:bold; margin-bottom:10px;"></div>
-            <div id="vopts"></div>
-        </div>
-    </div>
-</div>
 
 </body>
 </html>
