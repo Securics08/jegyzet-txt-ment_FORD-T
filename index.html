@@ -91,6 +91,80 @@ iframe.preview{flex:1;border:none;background:#fff;width:100%}
   font-weight:900 !important;
   text-shadow:0 0 8px #ffffffaa !important;
 }
+
+.last-saved-name{
+  display:inline-block;
+  background:#330033;
+  border:1.5px solid #ff00ff;
+  color:#ff00ff;
+  font-size:11px;
+  font-weight:900;
+  padding:3px 8px;
+  border-radius:6px;
+  margin-left:8px;
+  max-width:130px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  vertical-align:middle;
+  box-shadow:0 0 8px #ff00ff88;
+  text-shadow:0 0 6px #ff00ff;
+}
+.menu-btn.has-data .last-saved-name{
+  background:#440044;
+  border-color:#ff00ff;
+  color:#ff88ff;
+  font-size:12px;
+  box-shadow:0 0 12px #ff00ffaa;
+  text-shadow:0 0 8px #ff00ff;
+}
+.last-saved-name.strong-yellow{
+  background:#332200;
+  border-color:#ffea00;
+  color:#ffea00;
+  box-shadow:0 0 10px #ffea00aa;
+  text-shadow:0 0 8px #ffea00;
+}
+
+.last-saved-name:hover{
+  filter:brightness(1.3);
+  transform:scale(1.05);
+  cursor:help;
+  z-index:10;
+}
+
+.last-full-under{
+  display:block;
+  font-size:10px;
+  font-weight:900;
+  max-width:100px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  margin-top:3px;
+  padding:2px 6px;
+  border-radius:5px;
+  background:#000000aa;
+  text-align:center;
+  line-height:1.2;
+}
+.count-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  margin-right:4px;
+}
+.menu-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.menu-btn.has-data .last-full-under{
+  font-size:11px;
+  background:#000000cc;
+  box-shadow:0 0 8px currentColor;
+}
 </style></head><body>
 <div class="topbar" id="topbar"><div class="logo">100in1-V12</div></div>
 <div class="main-wrap">
@@ -136,14 +210,37 @@ function updateCnt(id, count){
         el.style.display='inline-block';
         if(btn){
           btn.classList.add('has-data');
-          // Make repo text white bigger as in image
           btn.style.color='#fff';
         }
+        // Update last name if not already
+        try{
+          const lastEl=document.getElementById('last'+(id-1));
+          if(lastEl && (lastEl.style.display==='none' || !lastEl.textContent)){
+            const arr=JSON.parse(localStorage.getItem('NeonRepoV5_LS_'+id)||"[]");
+            if(arr.length>0){
+              const last=arr[arr.length-1];
+              const name=last.fileName||last.name||'';
+              if(name){
+                lastEl.textContent=name;
+                lastEl.title=name;
+                lastEl.style.display='block';
+                try{ const b=document.getElementById('btn'+(id-1)); if(b){ lastEl.style.color=b.style.borderColor; lastEl.style.borderColor=b.style.borderColor; } }catch(e){}
+
+                lastEl.classList.add('strong-yellow');
+                try{localStorage.setItem('NeonRepoV5_LAST_'+id, name);}catch(e){}
+              }
+            }
+          }
+        }catch(e){}
       }else{
         if(btn){
           btn.classList.remove('has-data');
           btn.style.color='';
         }
+        try{
+          const lastEl=document.getElementById('last'+(id-1));
+          if(lastEl){lastEl.style.display='none'; lastEl.textContent='';}
+        }catch(e){}
       }
     }
   }catch(e){}
@@ -760,11 +857,45 @@ function importAll100(){
     btn.className='menu-btn'+(i===1?' active':'');
     btn.id='btn'+(i-1);
     btn.style.borderColor=col;
-    btn.innerHTML='<span class="cyan-cnt" id="cnt'+(i-1)+'" style="background:'+col+'22; border-color:'+col+'; color:'+col+';">0</span>'+i+'. Repo '+i;
+    // Load last name from LS if exists
+    let lastName='';
+    try{
+      const lastStored=localStorage.getItem('NeonRepoV5_LAST_'+i);
+      if(lastStored) lastName=lastStored;
+      else{
+        const arr=JSON.parse(localStorage.getItem('NeonRepoV5_LS_'+i)||"[]");
+        if(arr.length>0){
+          const last=arr[arr.length-1];
+          lastName=last.fileName||last.name||'';
+        }
+      }
+    }catch(e){}
+    const fullNameHtml = lastName 
+      ? '<span class="last-full-under" id="last'+(i-1)+'" style="color:'+col+'; border:1px solid '+col+'; box-shadow:0 0 6px '+col+'66;" title="'+lastName.replace(/"/g,'&quot;')+'">'+lastName+'</span>'
+      : '<span class="last-full-under" id="last'+(i-1)+'" style="display:none;"></span>';
+    btn.innerHTML='<div class="count-col"><span class="cyan-cnt" id="cnt'+(i-1)+'" style="background:'+col+'22; border-color:'+col+'; color:'+col+';">0</span>'+fullNameHtml+'</div>'+i+'. REPO '+i;
     btn.onclick=()=>switchDB(i);
     topbar.appendChild(btn);
   }
 })();
+
+function updateLastName(id, name){
+  try{
+    const el=document.getElementById('last'+(id-1));
+    const btn=document.getElementById('btn'+(id-1));
+    const col = btn ? btn.style.borderColor : '#00ffff';
+    if(el && name){
+      el.textContent=name; // teljes név
+      el.title=name;
+      el.style.display='block';
+      el.style.color=col;
+      el.style.borderColor=col;
+      el.style.boxShadow='0 0 6px '+col+'66';
+      try{localStorage.setItem('NeonRepoV5_LAST_'+id, name);}catch(e){}
+    }
+  }catch(e){}
+}
+
 
 window.onload=()=>{initDB(); setTimeout(updateAllCounts,800);};
 initDB();
